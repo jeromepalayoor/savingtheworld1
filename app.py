@@ -8,10 +8,17 @@ app = Flask(__name__)
 def home():
     return render_template('index.html')
 
-@app.route('/name')
-def name():
-    return "hi jerome!!!"
+@app.route('/login')
+def login():
+    return "pls login"
 
+@app.route('/register')
+def register():
+    return "registering"
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return "this page doesnt exist", 404
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
