@@ -1,4 +1,5 @@
 from flask import Flask, make_response, render_template, request, redirect
+from hashlib import sha256
 import os
 import uuid
 
@@ -13,14 +14,14 @@ def login():
     if request.cookies.get('user'):
         cookie = request.cookies.get('user')
         cookies = []
-        with open('users', 'r') as f:
+        with open('db/users', 'r') as f:
             for i in f.read().split(' '):
                 cookies.append(i)
         if cookie in cookies:
             return redirect('/' + cookie)
     if request.method == 'POST':
         cookie = str(uuid.uuid4())
-        with open('users', 'a') as f:
+        with open('db/users', 'a') as f:
             f.write(cookie + ' ')
         resp = make_response(redirect('/' + cookie))
         resp.set_cookie('user', cookie)
