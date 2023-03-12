@@ -20,7 +20,7 @@ def login():
             return redirect('/' + cookie)
     if request.method == 'POST':
         cookie = str(uuid.uuid4())
-        with open('users', 'w') as f:
+        with open('users', 'a') as f:
             f.write(cookie + ' ')
         resp = make_response(redirect('/' + cookie))
         resp.set_cookie('user', cookie)
@@ -28,9 +28,25 @@ def login():
     else:
         return render_template('login.html')
 
-@app.route('/register')
+@app.route('/register', methods = ['POST', 'GET'])
 def register():
-    return "registering"
+    if request.cookies.get('user'):
+        cookie = request.cookies.get('user')
+        cookies = []
+        with open('users', 'r') as f:
+            for i in f.read().split(' '):
+                cookies.append(i)
+        if cookie in cookies:
+            return redirect('/' + cookie)
+    if request.method == 'POST':
+        cookie = str(uuid.uuid4())
+        with open('users', 'a') as f:
+            f.write(cookie + ' ')
+        resp = make_response(redirect('/' + cookie))
+        resp.set_cookie('user', cookie)
+        return resp
+    else:
+        return render_template('login.html')
 
 @app.errorhandler(404)
 def page_not_found(e):
