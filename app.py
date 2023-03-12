@@ -10,7 +10,7 @@ def home():
 
 @app.route('/login')
 def login():
-    return "pls login"
+    return "pls login now"
 
 @app.route('/register')
 def register():
