@@ -1,16 +1,32 @@
-from flask import Flask, render_template
+from flask import Flask, make_response, render_template, request, redirect
 import os
+import uuid
 
 app = Flask(__name__)
-
 
 @app.route('/')
 def home():
     return render_template('index.html')
 
-@app.route('/login')
+@app.route('/login', methods = ['POST', 'GET'])
 def login():
-    return "pls login now"
+    if request.cookies.get('user'):
+        cookie = request.cookies.get('user')
+        cookies = []
+        with open('users', 'r') as f:
+            for i in f.read().split(' '):
+                cookies.append(i)
+        if cookie in cookies:
+            return redirect('/' + cookie)
+    if request.method == 'POST':
+        cookie = str(uuid.uuid4())
+        with open('users', 'w') as f:
+            f.write(cookie + ' ')
+        resp = make_response(redirect('/' + cookie))
+        resp.set_cookie('user', cookie)
+        return resp
+    else:
+        return render_template('login.html')
 
 @app.route('/register')
 def register():
