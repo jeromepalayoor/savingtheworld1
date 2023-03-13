@@ -11,17 +11,26 @@ def home():
 
 @app.route('/login', methods = ['POST', 'GET'])
 def login():
+    #checks whether user is logged in arld
     if request.cookies.get('user'):
         cookie = request.cookies.get('user')
         cookies = []
-        with open('db/users', 'r') as f:
-            for i in f.read().split(' '):
-                cookies.append(i)
-        if cookie in cookies:
-            return redirect('/' + cookie)
+        with open('db/sessions', 'r') as f:
+            for i in f.read().splitlines():
+                data = i.split(' ')
+                cookies.append(data)
+        for a in cookies:
+            if cookie == a[1]:
+                return redirect('/' + a[0])
     if request.method == 'POST':
         cookie = str(uuid.uuid4())
-        with open('db/users', 'a') as f:
+        username = request.form['username']
+        password = request.form['password']
+        data = []
+        with open('db/users', 'r') as f:
+            for i in f.read().splitlines():
+                data.append(i.split(' '))
+        with open('db/sessions', 'a') as f:
             f.write(cookie + ' ')
         resp = make_response(redirect('/' + cookie))
         resp.set_cookie('user', cookie)
@@ -31,14 +40,17 @@ def login():
 
 @app.route('/register', methods = ['POST', 'GET'])
 def register():
+    #checks whether user is logged in arld
     if request.cookies.get('user'):
         cookie = request.cookies.get('user')
         cookies = []
-        with open('users', 'r') as f:
-            for i in f.read().split(' '):
-                cookies.append(i)
-        if cookie in cookies:
-            return redirect('/' + cookie)
+        with open('db/sessions', 'r') as f:
+            for i in f.read().splitlines():
+                data = i.split(' ')
+                cookies.append(data)
+        for a in cookies:
+            if cookie == a[1]:
+                return redirect('/' + a[0])
     if request.method == 'POST':
         cookie = str(uuid.uuid4())
         with open('users', 'a') as f:
