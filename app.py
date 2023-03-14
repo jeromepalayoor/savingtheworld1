@@ -54,8 +54,16 @@ def login():
         for d in data:
             if username == d[0] and password == d[1]:
                 cookie = str(uuid.uuid4())
-                with open("db/sessions", "a") as f:
-                    f.write(username + " " + cookie + '\n')
+                cookies = []
+                with open("db/sessions", "r") as f:
+                    a = f.read().strip().splitlines()
+                    cookies.append(a.split(","))
+                with open("db/sessions", "w") as f:
+                    adding = ""
+                    for c in cookies:
+                        if c[0] != username:
+                            adding += f"{a[0]},{a[1]}\n"
+                    adding += f'{username},{cookie}\n'
                 resp = make_response(redirect("/users/" + username))
                 resp.set_cookie("user", cookie)
                 return resp
@@ -77,7 +85,7 @@ def register():
                 cookies.append(data)
         for a in cookies:
             if cookie == a[1]:
-                return redirect("/" + a[0])
+                return redirect("/users/" + a[0])
     if request.method == "POST":
         username = request.form["username"].strip().replace("\n", " ").replace(",", " ")
         if not username.isalnum():
@@ -137,12 +145,12 @@ def verify():
                 with open("db/users", "w") as f:
                     for user in userdata:
                         f.write(f"{user[0]},{user[1]},{user[2]},{user[3]},{user[4]},{user[5]}\n")
-                cookie = str(uuid.uuid4())
-                with open("db/sessions", "a") as f:
-                    f.write(d[0] + "," + cookie + "\n")
-                resp = make_response(redirect("/users/" + d[0]))
-                resp.set_cookie("user", cookie)
-                return resp
+                with open("db/verification", "w") as f:
+                    for d in data:
+                        if d[1] != token:
+                            f.write(f'{d[0]},{d[1]}\n')
+                return render_template("verified.html")
+        return make_response(redirect("/error?error=Verification link is either invalid or has expired"))
     return render_template("verify.html")
 
 #user page
