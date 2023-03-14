@@ -38,7 +38,7 @@ def login():
         cookies = []
         with open("db/sessions", "r") as f:
             for i in f.read().strip().splitlines():
-                data = i.split(" ")
+                data = i.split(",")
                 cookies.append(data)
         for a in cookies:
             if cookie == a[1]:
@@ -72,8 +72,8 @@ def register():
         cookie = request.cookies.get("user")
         cookies = []
         with open("db/sessions", "r") as f:
-            for i in f.read().splitlines():
-                data = i.split(" ")
+            for i in f.read().strip().splitlines():
+                data = i.split(",")
                 cookies.append(data)
         for a in cookies:
             if cookie == a[1]:
@@ -92,7 +92,7 @@ def register():
             return make_response(redirect("/error?error=Email is invalid"))
         data = []
         with open("db/users", "r") as f:
-            for i in f.read().splitlines():
+            for i in f.read().strip().splitlines():
                 data.append(i.split(","))
         for d in data:
             print(d)
@@ -103,10 +103,13 @@ def register():
         with open('db/users', 'a') as f:
             adding = username + ',' + str(sha256(str(password + salt).encode("utf-8")).hexdigest()) + ',' + fullname + ',' + email + ',' + class_ + ',' + 'false' + '\n'
             f.write(adding)
-        send_email("Blog account activated", f"Please verify your email before using your account", myemail, [email], mypassword)
+        token = str(uuid.uuid4()+uuid.uuid4()+uuid.uuid4())
+        with open("db/verification", "a"):
+            f.write(username + "," + token + "\n")
+        send_email("Blog account activated", f"Please verify your email before using your account {request.url_root}verify?token={token}", myemail, [email], mypassword)
         cookie = str(uuid.uuid4())
         with open("db/sessions", "a") as f:
-            f.write(username + " " + cookie + "\n")
+            f.write(username + "," + cookie + "\n")
         resp = make_response(redirect("/users/" + username))
         resp.set_cookie("user", cookie)
         return resp
@@ -118,7 +121,28 @@ def register():
 def verify():
     if request.args.get('token'):
         token = request.args.get('token')
-
+        data = []
+        with open("db/verification", "r") as f:
+            for i in f.read().strip().splitlines():
+                data.append(i.split(","))
+        for d in data:
+            if d[1] == token:
+                userdata = []
+                with open("db/users", "r") as f:
+                    for i in f.read().strip().splitlines():
+                        userdata.append(i.split(","))
+                for user in userdata:
+                    if user[0] == d[0]:
+                        user[5] = "True"
+                with open("db/users", "w") as f:
+                    for user in userdata:
+                        f.write(f"{user[0]},{user[1]},{user[2]},{user[3]},{user[4]},{user[5]}\n")
+                cookie = str(uuid.uuid4())
+                with open("db/sessions", "a") as f:
+                    f.write(d[0] + "," + cookie + "\n")
+                resp = make_response(redirect("/users/" + d[0]))
+                resp.set_cookie("user", cookie)
+                return resp
     return render_template("verify.html")
 
 #user page
@@ -126,7 +150,7 @@ def verify():
 def userpage(username):
     data = []
     with open("db/users", "r") as f:
-        for i in f.read().splitlines():
+        for i in f.read().strip().splitlines():
             data.append(i.split(","))
     for d in data:
         if d[0] == username:
