@@ -103,7 +103,7 @@ def register():
         with open('db/users', 'a') as f:
             adding = username + ',' + str(sha256(str(password + salt).encode("utf-8")).hexdigest()) + ',' + fullname + ',' + email + ',' + class_ + ',' + 'false' + '\n'
             f.write(adding)
-        token = str(uuid.uuid4()+uuid.uuid4()+uuid.uuid4())
+        token = str(uuid.uuid4())+str(uuid.uuid4())+str(uuid.uuid4())
         with open("db/verification", "a"):
             f.write(username + "," + token + "\n")
         send_email("Blog account activated", f"Please verify your email before using your account {request.url_root}verify?token={token}", myemail, [email], mypassword)
