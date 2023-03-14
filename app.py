@@ -13,10 +13,12 @@ alphanumeric = string.ascii_letters + string.digits
 
 app = Flask(__name__)
 
+#home page, to update
 @app.route("/")
 def home():
     return render_template("index.html")
 
+#send emails to verify account
 def send_email(subject, body, sender, recipients, password):
     msg = MIMEText(body)
     msg['Subject'] = subject
@@ -27,6 +29,7 @@ def send_email(subject, body, sender, recipients, password):
     smtp_server.sendmail(sender, recipients, msg.as_string())
     smtp_server.quit()
 
+#login handler
 @app.route("/login", methods=["POST", "GET"])
 def login():
     # checks whether user is logged in arld
@@ -46,22 +49,22 @@ def login():
         password = str(sha256(str(request.form["password"].strip() + salt).encode("utf-8")).hexdigest())
         data = []
         with open("db/users", "r") as f:
-            for i in f.read().splitlines():
+            for i in f.read().strip().splitlines():
                 data.append(i.split(","))
         for d in data:
             if username == d[0] and password == d[1]:
                 cookie = str(uuid.uuid4())
                 with open("db/sessions", "a") as f:
-                    f.write("\n" + username + " " + cookie)
+                    f.write(username + " " + cookie + '\n')
                 resp = make_response(redirect("/users/" + username))
                 resp.set_cookie("user", cookie)
                 return resp
-        resp = make_response(redirect("/error?error=Incorrect username and/or password"))
-        return resp
+        return make_response(redirect("/error?error=Incorrect username and/or password"))
     else:
         return render_template("login.html")
 
 
+#register new account
 @app.route("/register", methods=["POST", "GET"])
 def register():
     # checks whether user is logged in arld
@@ -98,9 +101,9 @@ def register():
             if email == d[3]:
                 return make_response(redirect("/error?error=Email is in use already"))
         with open('db/users', 'a') as f:
-            adding = '\n' + username + ',' + str(sha256(str(password + salt).encode("utf-8")).hexdigest()) + ',' + fullname + ',' + email + ',' + class_ + ',' + 'false'
+            adding = username + ',' + str(sha256(str(password + salt).encode("utf-8")).hexdigest()) + ',' + fullname + ',' + email + ',' + class_ + ',' + 'false' + '\n'
             f.write(adding)
-        send_email("Blog account activated", f"Login to your account with these details:\nusername:{username}\npassword:{password}", myemail, [email], mypassword)
+        send_email("Blog account activated", f"Please verify your email before using your account", myemail, [email], mypassword)
         cookie = str(uuid.uuid4())
         with open("db/sessions", "a") as f:
             f.write(username + " " + cookie + "\n")
@@ -110,13 +113,35 @@ def register():
     else:
         return render_template("register.html")
 
+#verify email
+@app.route("/verify")
+def verify():
+    if request.args.get('token'):
+        token = request.args.get('token')
+
+    return render_template("verify.html")
+
+#user page
+@app.route("/users/<username>")
+def userpage(username):
+    data = []
+    with open("db/users", "r") as f:
+        for i in f.read().splitlines():
+            data.append(i.split(","))
+    for d in data:
+        if d[0] == username:
+            return f'Username: {d[0]}<br>Full name: {d[2]}<br>Class: {d[4]}<br>Verified: {d[5]}'
+    return f"User '{username}' not found"
+        
+#error handling
 @app.route("/error")
 def error():
-    #in case any error
     if request.args.get('error'):
         return request.args.get('error')
-    return make_response(redirect("/"))
+    resp = make_response(redirect("/"))
+    return resp
 
+#404 page not found error handling
 @app.errorhandler(404)
 def page_not_found(e):
     return "this page doesnt exist", 404
