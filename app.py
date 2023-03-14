@@ -103,7 +103,7 @@ def register():
             adding = '\n' + username + ',' + str(sha256(str(password + salt).encode("utf-8")).hexdigest()) + ',' + fullname + ',' + email + ',' + class_ + ',' + 'false'
             f.write(adding)
         send_email("Blog account activated", f"Login to your account with these details:\nusername:{username}\npassword:{password}", myemail, [email], mypassword)
-        return "check your email bruhhhhh"
+        return "check your email bruhhhhhhhh"
     else:
         return render_template("register.html")
 
