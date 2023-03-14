@@ -101,10 +101,10 @@ def register():
             if email == d[3]:
                 return make_response(redirect("/error?error=Email is in use already"))
         with open('db/users', 'a') as f:
-            adding = username + ',' + str(sha256(str(password + salt).encode("utf-8")).hexdigest()) + ',' + fullname + ',' + email + ',' + class_ + ',' + 'false' + '\n'
+            adding = username + ',' + str(sha256(str(password + salt).encode("utf-8")).hexdigest()) + ',' + fullname + ',' + email + ',' + class_ + ',' + 'False' + '\n'
             f.write(adding)
         token = str(uuid.uuid4())+str(uuid.uuid4())+str(uuid.uuid4())
-        with open("db/verification", "a"):
+        with open("db/verification", "a") as f:
             f.write(username + "," + token + "\n")
         send_email("Blog account activated", f"Please verify your email before using your account {request.url_root}verify?token={token}", myemail, [email], mypassword)
         cookie = str(uuid.uuid4())
