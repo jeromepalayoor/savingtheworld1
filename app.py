@@ -34,7 +34,7 @@ def login():
         cookie = request.cookies.get("user")
         cookies = []
         with open("db/sessions", "r") as f:
-            for i in f.read().splitlines():
+            for i in f.read().strip().splitlines():
                 data = i.split(" ")
                 cookies.append(data)
         for a in cookies:
@@ -97,15 +97,16 @@ def register():
                 return make_response(redirect("/error?error=Username is in use already"))
             if email == d[3]:
                 return make_response(redirect("/error?error=Email is in use already"))
-        password = ""
-        for i in range(15):
-            password += random.choice(alphanumeric)
-        print(password)
         with open('db/users', 'a') as f:
             adding = '\n' + username + ',' + str(sha256(str(password + salt).encode("utf-8")).hexdigest()) + ',' + fullname + ',' + email + ',' + class_ + ',' + 'false'
             f.write(adding)
         send_email("Blog account activated", f"Login to your account with these details:\nusername:{username}\npassword:{password}", myemail, [email], mypassword)
-        return "check your email bruh"
+        cookie = str(uuid.uuid4())
+        with open("db/sessions", "a") as f:
+            f.write(username + " " + cookie + "\n")
+        resp = make_response(redirect("/users/" + username))
+        resp.set_cookie("user", cookie)
+        return resp
     else:
         return render_template("register.html")
 
