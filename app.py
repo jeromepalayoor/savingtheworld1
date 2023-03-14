@@ -80,7 +80,7 @@ def register():
         email = request.form["email"].strip().replace("\n", " ").replace(",", " ")
         class_ = request.form["class"].strip().replace("\n", " ").replace(",", " ")
         fullname = request.form["fullname"].strip().replace("\n", " ").replace(",", " ")
-        if not re.search("^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[-]?\w+[.]\w{2,3}$", email): #check if email is valid using regex
+        if not re.search("^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[-]?\w+[.]\w{2,3}$", email): #check if email is valid using rege
             resp = make_response(redirect("/error?error=Email is invalid"))
             return resp
         data = []
