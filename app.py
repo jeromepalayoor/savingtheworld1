@@ -77,12 +77,16 @@ def register():
                 return redirect("/" + a[0])
     if request.method == "POST":
         username = request.form["username"].strip().replace("\n", " ").replace(",", " ")
+        if not username.isalnum():
+            return make_response(redirect("/error?error=Username contains invalid characters"))
         email = request.form["email"].strip().replace("\n", " ").replace(",", " ")
+        password = request.form["password"].strip().replace("\n", " ").replace(",", " ")
+        if not password.isalnum():
+            return make_response(redirect("/error?error=Password contains invalid characters"))
         class_ = request.form["class"].strip().replace("\n", " ").replace(",", " ")
         fullname = request.form["fullname"].strip().replace("\n", " ").replace(",", " ")
         if not re.search("^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[-]?\w+[.]\w{2,3}$", email): #check if email is valid using regex
-            resp = make_response(redirect("/error?error=Email is invalid"))
-            return resp
+            return make_response(redirect("/error?error=Email is invalid"))
         data = []
         with open("db/users", "r") as f:
             for i in f.read().splitlines():
@@ -90,11 +94,9 @@ def register():
         for d in data:
             print(d)
             if username == d[0]:
-                resp = make_response(redirect("/error?error=Username is in use already"))
-                return resp
+                return make_response(redirect("/error?error=Username is in use already"))
             if email == d[3]:
-                resp = make_response(redirect("/error?error=Email is in use already"))
-                return resp
+                return make_response(redirect("/error?error=Email is in use already"))
         password = ""
         for i in range(15):
             password += random.choice(alphanumeric)
