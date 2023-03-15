@@ -199,6 +199,17 @@ def verify():
         )
     return render_template("verify.html")
 
+@app.route("/users")
+@app.route("/users/")
+def user():
+    rsp = ""
+    data = []
+    with open("db/users", "r") as f:
+        for i in f.read().strip().splitlines():
+            data.append(i.split(","))
+    for d in data:
+        rsp += f'Username: <a href="/users/{d[0]}"> {d[0]}</a><br>Full name: {d[2]}<br>Class: {d[4]}<br>Verified: {d[5]}<br><br>'
+    return rsp
 
 # user page
 @app.route("/users/<username>")
