@@ -207,8 +207,10 @@ def user():
     with open("db/users", "r") as f:
         for i in f.read().strip().splitlines():
             data.append(i.split(","))
-    for d in data:
-        rsp += f'Username: <a href="/users/{d[0]}"> {d[0]}</a><br>Full name: {d[2]}<br>Class: {d[4]}<br>Verified: {d[5]}<br><br>'
+    rsp += '<html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous"></head><body><div class="container"><table class="table"><thead><tr><th scope="col"></th><th scope="col">Username</th><th scope="col">Full name</th><th scope="col">Class</th><th scope="col">Verified</th></tr></thead><tbody>'
+    for i ,d in enumerate(data):
+        rsp += f'<tr><th scope="row">{str(i+1)}</th><td><a href="/users/{d[0]}"> {d[0]}</a></td><td>{d[2]}</td><td>{d[4]}</td><td>{d[5]}</td></tr>'
+    rsp += "</tbody></table></div></body></html>"
     return rsp
 
 # user page
