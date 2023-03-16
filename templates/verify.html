@@ -72,15 +72,15 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Email verification</h5>
-                    <h5 class="card-text">Go to your emails and clink on the
+                    <p class="card-text">Go to your emails and clink on the
                         verification link to verify your
                         email. Please make sure to check the spam folders in
                         case you did not
-                        receive your verification email.</h5>
+                        receive your verification email.</p>
                     <div class="btn-group" role="group">
-                        <a href="/" class="btn btn-primary border-dark border-1">Home</a>
+                        <a href="/" class="btn btn-outline-dark">Home</a>
                         {% if loggedin %}
-                        <a href="/users/{{username}}" class="btn btn-primary border-dark border-1">Account</a>
+                        <a href="/users/{{username}}" class="btn btn-outline-dark">Account</a>
                         {% endif %}
                     </div>
                 </div>
