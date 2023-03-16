@@ -11,7 +11,7 @@
             rel="stylesheet"
             integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
             crossorigin="anonymous">
-            <style>
+        <style>
                 body::before{
                     content: '';
                     height: 90px;
@@ -33,16 +33,20 @@
                 <div class="collapse navbar-collapse" id="navbarlinks">
                     <ul class="navbar-nav ms-auto mb-1 mb-md-0">
                         <li class="nav-item">
-                            <a class="nav-link p-1 m-1 text-bg-secondary rounded-2" href="/">Home</a>
+                            <a class="nav-link p-1 m-1 text-bg-secondary
+                                rounded-2" href="/">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link p-1 m-1 text-bg-secondary rounded-2" href="/users">Users</a>
+                            <a class="nav-link p-1 m-1 text-bg-secondary
+                                rounded-2" href="/users">Users</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link p-1 m-1 text-bg-secondary rounded-2" href="/login">Login</a>
+                            <a class="nav-link p-1 m-1 text-bg-secondary
+                                rounded-2" href="/login">Login</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link p-1 m-1 text-bg-secondary rounded-2" href="/register">Register</a>
+                            <a class="nav-link p-1 m-1 text-bg-secondary
+                                rounded-2" href="/register">Register</a>
                         </li>
                     </ul>
                 </div>
@@ -52,12 +56,15 @@
         <div class="container">
             <div class="card">
                 <div class="card-body">
-                  <h5 class="card-title">You have been successfully logged out.</h5>
-                  <a href="/login" class="btn btn-primary">Login</a>
-                  <a href="/register" class="btn btn-primary">Register</a>
-                  <a href="/" class="btn btn-primary">Home</a>
+                    <h5 class="card-title">You have been successfully logged
+                        out.</h5>
+                    <div class="btn-group" role="group">
+                        <a href="/login" class="btn btn-primary">Login</a>
+                        <a href="/register" class="btn btn-primary">Register</a>
+                        <a href="/" class="btn btn-primary">Home</a>
+                    </div>
                 </div>
-              </div>
+            </div>
         </div>
 
         <script
