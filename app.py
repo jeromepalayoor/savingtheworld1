@@ -128,6 +128,8 @@ def register():
                 redirect("/error?error=Password is too long")
             )
         class_ = request.form["class"].strip().replace("\n", " ").replace(",", " ")
+        if not class_ == "24/11" or not class_ == "24/12" or not class_ == "24/13" or not class_ == "24/14" or not class_ == "24/15":
+            return make_response(redirect("/error?error=Class is invalid"))
         fullname = request.form["fullname"].strip().replace("\n", " ").replace(",", " ")
         # check if email is valid using regex
         if not re.search("^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[-]?\w+[.]\w{2,3}$", email):
