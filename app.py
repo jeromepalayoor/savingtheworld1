@@ -95,12 +95,12 @@ def login():
 @app.route("/register", methods=["POST", "GET"])
 def register():
     # checks whether user is logged in arld
-    loggedin, username = checklogin()
+    loggedin, selfusername = checklogin()
     if loggedin:
-        return redirect("/users/" + username)
+        return redirect("/users/" + selfusername)
     # registers new user and sends confirmation email after validating their data
     if request.method == "POST":
-        username = request.form["username"].strip().replace("\n", " ").replace(",", " ")
+        username = request.form["username"].strip().replace("\n", "").replace(",", "")
         if not username.isalnum():
             return make_response(
                 redirect("/error?error=Username contains invalid characters")
@@ -113,8 +113,8 @@ def register():
             return make_response(
                 redirect("/error?error=Username is too long")
             )
-        email = request.form["email"].strip().replace("\n", " ").replace(",", " ")
-        password = request.form["password"].strip().replace("\n", " ").replace(",", " ")
+        email = request.form["email"].strip().replace("\n", "").replace(",", "")
+        password = request.form["password"].strip().replace("\n", "").replace(",", "")
         if not password.isalnum():
             return make_response(
                 redirect("/error?error=Password contains invalid characters")
@@ -127,10 +127,11 @@ def register():
             return make_response(
                 redirect("/error?error=Password is too long")
             )
-        class_ = request.form["class"].strip().replace("\n", " ").replace(",", " ")
-        if not class_ == "24/11" or not class_ == "24/12" or not class_ == "24/13" or not class_ == "24/14" or not class_ == "24/15":
+        class_ = request.form["class"].strip().replace("\n", "").replace(",", "")
+        print(class_)
+        if not (class_ == "24/11" or class_ == "24/12" or class_ == "24/13" or class_ == "24/14" or class_ == "Teacher"):
             return make_response(redirect("/error?error=Class is invalid"))
-        fullname = request.form["fullname"].strip().replace("\n", " ").replace(",", " ")
+        fullname = request.form["fullname"].strip().replace("\n", "").replace(",", "")
         # check if email is valid using regex
         if not re.search("^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[-]?\w+[.]\w{2,3}$", email):
             return make_response(redirect("/error?error=Email is invalid"))
