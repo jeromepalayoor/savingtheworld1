@@ -14,7 +14,7 @@
             <style>
                 body::before{
                     content: '';
-                    height: 70px;
+                    height: 80px;
                     display: block;
                 }
             </style>
@@ -33,29 +33,31 @@
                 <div class="collapse navbar-collapse" id="navbarlinks">
                     <ul class="navbar-nav ms-auto mb-1 mb-md-0">
                         <li class="nav-item">
-                            <a class="nav-link active" href="/">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Post</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/users">User</a>
+                            <a class="nav-link active m-2" href="/">Home</a>
                         </li>
                         {% if loggedin %}
+                            <li class="nav-item">
+                                <a class="nav-link text-bg-primary m-2 rounded-2" href="#">Add a Post</a>
+                            </li>
+                        {% endif %}
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Account</a>
+                            <a class="nav-link m-2" href="/users">Users</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-bg-danger rounded-2" href="/logout">Logout</a>
-                        </li>
+                        {% if loggedin %}
+                            <li class="nav-item">
+                                <a class="nav-link m-2" href="#">Account</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-bg-danger rounded-2 m-2" href="/logout">Logout</a>
+                            </li>
                         {% endif %}
                         {% if not loggedin %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="/login">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/register">Register</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link m-2" href="/login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link m-2" href="/register">Register</a>
+                            </li>
                         {% endif %}
                     </ul>
                 </div>
