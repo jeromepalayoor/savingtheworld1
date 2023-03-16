@@ -21,10 +21,9 @@
     </head>
 
     <body>
-
         <nav class="navbar navbar-expand-md text-bg-dark navbar-dark fixed-top">
             <div class="container-md container-fluid">
-                <a class="navbar-brand" href="/">Saving the World 1</a>
+                <a class="navbar-brand" href="/"><h3>Saving the World 1</h3></a>
                 <button class="navbar-toggler" type="button"
                     data-bs-toggle="collapse"
                     data-bs-target="#navbarlinks">
@@ -33,25 +32,27 @@
                 <div class="collapse navbar-collapse" id="navbarlinks">
                     <ul class="navbar-nav ms-auto mb-1 mb-md-0">
                         <li class="nav-item">
-                            <a class="nav-link p-2 m-2 text-bg-secondary
-                                rounded-2" href="/">Home</a>
+                            <a class="nav-link p-2 m-2 btn btn-outline-primary
+                                text-white rounded-2 text-end" href="/">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link p-2 m-2 text-bg-secondary
-                                rounded-2" href="/users">Users</a>
+                            <a class="nav-link p-2 m-2 btn btn-outline-secondary
+                                text-white rounded-2 text-end" href="/users">Users</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link p-2 m-2 text-bg-secondary
-                                rounded-2" href="/login">Login</a>
+                            <a class="nav-link p-2 m-2 btn btn-outline-secondary
+                                text-white rounded-2 text-end" href="/login">Login</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link p-2 m-2 text-bg-primary
-                                rounded-2" href="/register">Register</a>
+                            <a class="nav-link p-2 m-2 btn btn-outline-secondary
+                                text-white rounded-2 text-end" href="/register">Register</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
+        
+        
         <div class="container-md container-fluid">
             <form action="/register" method="post">
                 <h3>Register</h3>
@@ -59,7 +60,8 @@
                     <span class="input-group-text border-dark">@</span>
                     <div class="form-floating">
                         <input type="text" class="form-control border-dark"
-                            id="username" name="username" placeholder="Username">
+                            id="username" name="username"
+                            placeholder="Username">
                         <label for="username">Username</label>
                     </div>
                 </div>
@@ -67,7 +69,8 @@
                     alphanumeric character username</div>
                 <div class="input-group mb-1">
                     <div class="form-floating">
-                        <input type="password" name="password" class="form-control border-dark"
+                        <input type="password" name="password"
+                            class="form-control border-dark"
                             id="password" placeholder="Password">
                         <label for="password">Password</label>
                     </div>
@@ -84,7 +87,8 @@
                 <div class="input-group mb-4">
                     <div class="form-floating">
                         <input type="text" class="form-control border-dark"
-                            id="fullname" name="fullname" placeholder="Full name">
+                            id="fullname" name="fullname" placeholder="Full
+                            name">
                         <label for="fullname">Full name</label>
                     </div>
                 </div>

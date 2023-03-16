@@ -23,7 +23,7 @@
     <body>
         <nav class="navbar navbar-expand-md text-bg-dark navbar-dark fixed-top">
             <div class="container-md container-fluid">
-                <a class="navbar-brand" href="/">Saving the World 1</a>
+                <a class="navbar-brand" href="/"><h3>Saving the World 1</h3></a>
                 <button class="navbar-toggler" type="button"
                     data-bs-toggle="collapse"
                     data-bs-target="#navbarlinks">
@@ -32,43 +32,46 @@
                 <div class="collapse navbar-collapse" id="navbarlinks">
                     <ul class="navbar-nav ms-auto mb-1 mb-md-0">
                         <li class="nav-item">
-                            <a class="nav-link p-2 m-2 text-bg-secondary
-                                rounded-2" href="/">Home</a>
+                            <a class="nav-link p-2 m-2 btn btn-outline-primary
+                                text-white rounded-2 text-end" href="/">Home</a>
                         </li>
                         {% if loggedin %}
                         <li class="nav-item">
-                            <a class="nav-link p-2 m-2 text-bg-secondary
-                                rounded-2" href="#">Add a Post</a>
+                            <a class="nav-link btn btn-outline-secondary
+                                text-white p-2 m-2 rounded-2 text-end" href="#">Add
+                                a Post</a>
                         </li>
                         {% endif %}
                         <li class="nav-item">
-                            <a class="nav-link p-2 m-2 text-bg-secondary
-                                rounded-2" href="/users">Users</a>
+                            <a class="nav-link p-2 m-2 btn btn-outline-secondary
+                                text-white rounded-2 text-end" href="/users">Users</a>
                         </li>
                         {% if loggedin %}
                         <li class="nav-item">
-                            <a class="nav-link p-2 m-2 text-bg-primary
-                                rounded-2" href="/users/{{selfusername}}">Account</a>
+                            <a class="nav-link p-2 m-2 btn btn-outline-secondary
+                                text-white rounded-2 text-end"
+                                href="/users/{{username}}">Account</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link p-2 m-2 text-bg-danger rounded-2"
-                                href="/logout">Logout</a>
+                            <a class="nav-link btn btn-outline-danger text-white
+                                rounded-2 p-2 m-2 text-end" href="/logout">Logout</a>
                         </li>
                         {% endif %}
                         {% if not loggedin %}
                         <li class="nav-item">
-                            <a class="nav-link p-2 m-2 text-bg-secondary
-                                rounded-2" href="/login">Login</a>
+                            <a class="nav-link p-2 m-2 btn btn-outline-secondary
+                                text-white rounded-2 text-end" href="/login">Login</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link p-2 m-2 text-bg-secondary
-                                rounded-2" href="/register">Register</a>
+                            <a class="nav-link p-2 m-2 btn btn-outline-secondary
+                                text-white rounded-2 text-end" href="/register">Register</a>
                         </li>
                         {% endif %}
                     </ul>
                 </div>
             </div>
         </nav>
+
         <div class="container-md container-fluid">
             <div class="card"></div>
         </div>
