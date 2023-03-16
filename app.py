@@ -128,7 +128,6 @@ def register():
                 redirect("/error?error=Password is too long")
             )
         class_ = request.form["class"].strip().replace("\n", "").replace(",", "")
-        print(class_)
         if not (class_ == "24/11" or class_ == "24/12" or class_ == "24/13" or class_ == "24/14" or class_ == "Teacher"):
             return make_response(redirect("/error?error=Class is invalid"))
         fullname = request.form["fullname"].strip().replace("\n", "").replace(",", "")
@@ -140,7 +139,6 @@ def register():
             for i in f.read().strip().splitlines():
                 data.append(i.split(","))
         for d in data:
-            print(d)
             if username == d[0]:
                 return make_response(
                     redirect("/error?error=Username is in use already")
