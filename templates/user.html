@@ -73,7 +73,26 @@
         </nav>
 
         <div class="container-md container-fluid">
-            <div class="card"></div>
+            <table class="table table-striped-columns">
+                <tbody>
+                    <tr>
+                        <th scope="row">Username</th>
+                        <td>{{data[0]}}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Full Name</th>
+                        <td>{{data[2]}}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Class</th>
+                        <td>{{data[4]}}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Verified</th>
+                        <td>{{data[5]}}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
         <script
