@@ -69,19 +69,22 @@
                 </div>
             </div>
         </nav>
-        <div class="container">
+        <div class="container-md container-fluid">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Error</h5>
-                    <p class="card-text">{{text}}</p>
-                    {% if not loggedin %}
-                    <a href="/login" class="btn btn-primary">Login</a>
-                    <a href="/register" class="btn btn-primary">Register</a>
-                    {% endif %}
-                    {% if loggedin %}
-                    <a href="/users/{{username}}" class="btn btn-primary">Account</a>
-                    {% endif %}
-                    <a href="/" class="btn btn-primary">Home</a>
+                    <h5 class="card-title text-danger-emphasis">Error</h5>
+                    <p class="card-text border-danger">{{text}}</p>
+                    <div class="btn-group" role="group">
+                        <button onclick="history.back()" class="btn btn-outline-danger">Go Back</button>
+                        {% if not loggedin %}
+                        <a href="/login" class="btn btn-primary">Login</a>
+                        <a href="/register" class="btn btn-primary">Register</a>
+                        {% endif %}
+                        {% if loggedin %}
+                        <a href="/users/{{username}}" class="btn btn-primary">Account</a>
+                        {% endif %}
+                        <a href="/" class="btn btn-primary">Home</a>
+                    </div>
                 </div>
             </div>
         </div>

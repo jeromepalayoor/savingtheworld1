@@ -229,7 +229,7 @@ def userpage(username):
             data.append(i.split(","))
     for d in data:
         if d[0] == username:
-            return render_template("user.html", loggedin=loggedin, data=data, selfusername=selfusername)
+            return render_template("user.html", loggedin=loggedin, data=d, selfusername=selfusername)
     return render_template("error.html", text=f'User {username} does not exist.')
 
 
