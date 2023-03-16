@@ -253,8 +253,9 @@ def userpage(username):
 # error handling
 @app.route("/error")
 def error():
+    loggedin, username = checklogin()
     if request.args.get("error"):
-        return render_template("error.html", text=request.args.get("error"))
+        return render_template("error.html", text=request.args.get("error"), loggedin=loggedin, username=username)
     resp = make_response(redirect("/"))
     return resp
 
