@@ -47,7 +47,6 @@ def home():
     loggedin, username = checklogin()
     return render_template("index.html", loggedin=loggedin, username=username)
 
-
 # login handler
 @app.route("/login", methods=["POST", "GET"])
 def login():
@@ -223,21 +222,22 @@ def logout():
 # user page
 @app.route("/users/<username>")
 def userpage(username):
+    loggedin, selfusername = checklogin()
     data = []
     with open("db/users", "r") as f:
         for i in f.read().strip().splitlines():
             data.append(i.split(","))
     for d in data:
         if d[0] == username:
-            return f"Username: {d[0]}<br>Full name: {d[2]}<br>Class: {d[4]}<br>Verified: {d[5]}"
-    return f"User '{username}' not found"
+            return render_template("user.html", loggedin=loggedin, username=username, selfusername=selfusername)
+    return render_template("error.html", text=f'User {username} does not exist.')
 
 
 # error handling
 @app.route("/error")
 def error():
     if request.args.get("error"):
-        return request.args.get("error")
+        return render_template("error.html", text=request.args.get("error"))
     resp = make_response(redirect("/"))
     return resp
 
