@@ -105,11 +105,27 @@ def register():
             return make_response(
                 redirect("/error?error=Username contains invalid characters")
             )
+        if len(username) < 4:
+            return make_response(
+                redirect("/error?error=Username is too short")
+            )
+        if len(username) > 20:
+            return make_response(
+                redirect("/error?error=Username is too long")
+            )
         email = request.form["email"].strip().replace("\n", " ").replace(",", " ")
         password = request.form["password"].strip().replace("\n", " ").replace(",", " ")
         if not password.isalnum():
             return make_response(
                 redirect("/error?error=Password contains invalid characters")
+            )
+        if len(password) < 12:
+            return make_response(
+                redirect("/error?error=Password is too short")
+            )
+        if len(password) > 20:
+            return make_response(
+                redirect("/error?error=Password is too long")
             )
         class_ = request.form["class"].strip().replace("\n", " ").replace(",", " ")
         fullname = request.form["fullname"].strip().replace("\n", " ").replace(",", " ")
