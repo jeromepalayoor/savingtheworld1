@@ -24,7 +24,7 @@
 
         <nav class="navbar navbar-expand-md text-bg-dark navbar-dark fixed-top">
             <div class="container-md container-fluid">
-                <a class="navbar-brand" href="#">Saving the World 1</a>
+                <a class="navbar-brand" href="/">Saving the World 1</a>
                 <button class="navbar-toggler" type="button"
                     data-bs-toggle="collapse"
                     data-bs-target="#navbarlinks">
@@ -45,7 +45,7 @@
                         </li>
                         {% if loggedin %}
                             <li class="nav-item">
-                                <a class="nav-link m-2" href="#">Account</a>
+                                <a class="nav-link m-2" href="/users/{{username}}">Account</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-bg-danger rounded-2 m-2" href="/logout">Logout</a>

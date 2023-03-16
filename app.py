@@ -44,18 +44,8 @@ def checklogin():
 # home page, to update
 @app.route("/")
 def home():
-    loggedin = False
-    if request.cookies.get("user"):
-        cookie = request.cookies.get("user")
-        cookies = []
-        with open("db/sessions", "r") as f:
-            for i in f.read().strip().splitlines():
-                data = i.split(",")
-                cookies.append(data)
-        for a in cookies:
-            if cookie == a[1]:
-                loggedin = True
-    return render_template("index.html", loggedin=loggedin)
+    loggedin, username = checklogin()
+    return render_template("index.html", loggedin=loggedin, username=username)
 
 
 # login handler
