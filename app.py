@@ -69,9 +69,6 @@ def login():
                 with open("db/sessions", "w") as f:
                     adding = ""
                     for c in cookies:
-                        print(c)
-                        print(username)
-                        print(c[0] == username)
                         if c[0] != username:
                             adding += f"{c[0]},{c[1]}\n"
                     adding += f"{username},{cookie}\n"
@@ -203,7 +200,6 @@ def verify():
 @app.route("/users")
 @app.route("/users/")
 def user():
-    rsp = ""
     data = []
     with open("db/users", "r") as f:
         for i in f.read().strip().splitlines():

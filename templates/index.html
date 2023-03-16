@@ -11,11 +11,18 @@
             rel="stylesheet"
             integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
             crossorigin="anonymous">
+            <style>
+                body::before{
+                    content: '';
+                    height: 50px;
+                    display: block;
+                }
+            </style>
     </head>
 
     <body>
 
-        <nav class="navbar navbar-expand-md text-bg-dark navbar-dark">
+        <nav class="navbar navbar-expand-md text-bg-dark navbar-dark fixed-top">
             <div class="container-md container-fluid">
                 <a class="navbar-brand" href="#">Saving the World 1</a>
                 <button class="navbar-toggler" type="button"
