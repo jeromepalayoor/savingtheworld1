@@ -168,6 +168,7 @@ def register():
 # verify email
 @app.route("/verify")
 def verify():
+    loggedin, username = checklogin()
     if request.args.get("token"):
         token = request.args.get("token")
         data = []
@@ -192,11 +193,11 @@ def verify():
                     for d in data:
                         if d[1] != token:
                             f.write(f"{d[0]},{d[1]}\n")
-                return render_template("verified.html")
+                return render_template("verified.html", loggedin=loggedin, username=username)
         return make_response(
             redirect("/error?error=Verification link is either invalid or has expired")
         )
-    return render_template("verify.html")
+    return render_template("verify.html", loggedin=loggedin, username=username)
 
 
 @app.route("/users")
