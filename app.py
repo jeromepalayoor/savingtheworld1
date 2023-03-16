@@ -14,12 +14,6 @@ alphanumeric = string.ascii_letters + string.digits
 app = Flask(__name__)
 
 
-# home page, to update
-@app.route("/")
-def home():
-    return render_template("index.html")
-
-
 # send emails to verify account
 def send_email(subject, body, sender, recipients, password):
     msg = MIMEText(body)
@@ -32,10 +26,8 @@ def send_email(subject, body, sender, recipients, password):
     smtp_server.quit()
 
 
-# login handler
-@app.route("/login", methods=["POST", "GET"])
-def login():
-    # checks whether user is logged in arld
+# check login
+def checklogin():
     if request.cookies.get("user"):
         cookie = request.cookies.get("user")
         cookies = []
@@ -45,7 +37,34 @@ def login():
                 cookies.append(data)
         for a in cookies:
             if cookie == a[1]:
-                return redirect("/users/" + a[0])
+                return True, a[0]
+    return False, None
+
+
+# home page, to update
+@app.route("/")
+def home():
+    loggedin = False
+    if request.cookies.get("user"):
+        cookie = request.cookies.get("user")
+        cookies = []
+        with open("db/sessions", "r") as f:
+            for i in f.read().strip().splitlines():
+                data = i.split(",")
+                cookies.append(data)
+        for a in cookies:
+            if cookie == a[1]:
+                loggedin = True
+    return render_template("index.html", loggedin=loggedin)
+
+
+# login handler
+@app.route("/login", methods=["POST", "GET"])
+def login():
+    # checks whether user is logged in arld
+    loggedin, username = checklogin()
+    if loggedin:
+        return redirect("/users/" + username)
     # logs in if username and password is correct
     if request.method == "POST":
         username = request.form["username"].strip()
@@ -87,16 +106,10 @@ def login():
 @app.route("/register", methods=["POST", "GET"])
 def register():
     # checks whether user is logged in arld
-    if request.cookies.get("user"):
-        cookie = request.cookies.get("user")
-        cookies = []
-        with open("db/sessions", "r") as f:
-            for i in f.read().strip().splitlines():
-                data = i.split(",")
-                cookies.append(data)
-        for a in cookies:
-            if cookie == a[1]:
-                return redirect("/users/" + a[0])
+    loggedin, username = checklogin()
+    if loggedin:
+        return redirect("/users/" + username)
+    # registers new user and sends confirmation email after validating their data
     if request.method == "POST":
         username = request.form["username"].strip().replace("\n", " ").replace(",", " ")
         if not username.isalnum():
@@ -111,9 +124,8 @@ def register():
             )
         class_ = request.form["class"].strip().replace("\n", " ").replace(",", " ")
         fullname = request.form["fullname"].strip().replace("\n", " ").replace(",", " ")
-        if not re.search(
-            "^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[-]?\w+[.]\w{2,3}$", email
-        ):  # check if email is valid using regex
+        # check if email is valid using regex
+        if not re.search("^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[-]?\w+[.]\w{2,3}$", email):
             return make_response(redirect("/error?error=Email is invalid"))
         data = []
         with open("db/users", "r") as f:
@@ -200,11 +212,21 @@ def verify():
 @app.route("/users")
 @app.route("/users/")
 def user():
+    loggedin, username = checklogin()
     data = []
     with open("db/users", "r") as f:
         for i in f.read().strip().splitlines():
             data.append(i.split(","))
-    return render_template("users.html", length=len(data), users=data)
+    return render_template("users.html", length=len(data), users=data, loggedin=loggedin, username=username)
+
+
+@app.route("/logout")
+def logout():
+    if request.cookies.get("user"):
+        resp = make_response(redirect("/logout"))
+        resp.set_cookie("user", "", expires=0)
+        return resp
+    return render_template("logout.html")
 
 
 # user page

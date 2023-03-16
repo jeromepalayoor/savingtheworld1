@@ -40,9 +40,22 @@
                         <li class="nav-item">
                             <a class="nav-link active" href="#">Users</a>
                         </li>
+                        {% if loggedin %}
                         <li class="nav-item">
                             <a class="nav-link" href="#">Account</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-bg-danger rounded-2" href="/logout">Logout</a>
+                        </li>
+                        {% endif %}
+                        {% if not loggedin %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/register">Register</a>
+                        </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
