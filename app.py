@@ -17,11 +17,14 @@ UPLOAD_FOLDER = '/db_images'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # send emails to verify account
+
+
 def send_email(subject, body, sender, recipients, password):
     msg = MIMEText(body)
     msg["Subject"] = subject
@@ -279,12 +282,20 @@ def post():
             file = request.files['file']
             if file.filename != '':
                 if file and allowed_file(file.filename):
-                    filename = secure_filename(file.filename)
-                    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                    filename = str(uuid.uuid4()) + '_' + \
+                        secure_filename(file.filename)
+                    file.save(os.path.join(
+                        app.config['UPLOAD_FOLDER'], filename))
+                else:
+                    return make_response(
+                        redirect(
+                            "/error?error=File type is invalid, accepts only .png, .jpg and .jpeg")
+                    )
             else:
                 filename = ''
         else:
             filename = ''
+        
         return "posting"
     return render_template("post.html", loggedin=loggedin, username=username)
 
@@ -306,8 +317,6 @@ def page_not_found(e):
     return make_response(
         redirect("/error?error=Page does not exist")
     ), 404
-
-
 
 
 if __name__ == "__main__":
