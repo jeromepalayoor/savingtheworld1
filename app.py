@@ -153,6 +153,8 @@ def register():
             adding = (username + "," + str(sha256(str(password + salt).encode("utf-8")).hexdigest()
                                            ) + "," + fullname + "," + email + "," + class_ + "," + "False" + "\n")
             f.write(adding)
+        with open(f'db/datauser/{username}', 'w+') as f:
+            f.write("")
         token = str(uuid.uuid4()) + str(uuid.uuid4()) + str(uuid.uuid4())
         with open("db/verification", "a") as f:
             f.write(username + "," + token + "\n")
@@ -244,14 +246,22 @@ def userpage(username):
 @app.route("/post/", methods=["POST", "GET"])
 def post():
     loggedin, username = checklogin()
+    data = []
+    with open("db/users", "r") as f:
+        for i in f.read().strip().splitlines():
+            data.append(i.split(","))
+    for d in data:
+        if d[0] == username:
+            if d[5] == "False":
+                return make_response(redirect("/error?error=You are not a verified user. Verify your email first before posting any kind of content."))
     if request.method == "POST" and username:
-        filename = ''
+        filename = 'noimage'
         if 'file' in request.files:
             file = request.files['file']
             if file.filename != '':
                 if file and allowed_file(file.filename):
                     filename = str(uuid.uuid4()) + '_' + \
-                        secure_filename(file.filename)
+                        secure_filename(file.filename).replace(",", "")
                     file.save(os.path.join(
                         app.config['UPLOAD_FOLDER'], filename))
                 else:
@@ -272,12 +282,20 @@ def post():
             return make_response(redirect("/error?error=Description is too long"))
         post_ = escape(request.form["post"].strip())
         authorname = request.form["authorname"].strip().replace("\n", "")
-        if not all(x.isalnum() or x.isspace() for x in authorname):
+        if not all(x.isalnum() or x.isspace() or x == "-" for x in authorname):
             return make_response(redirect("/error?error=Title contains invalid characters"))
         if len(authorname) < 5:
             return make_response(redirect("/error?error=Author's name is too short"))
         if len(authorname) > 25:
             return make_response(redirect("/error?error=Author's name is too long"))
+        postid = str(uuid.uuid4())
+        with open(f'db/datapost/{postid}', "w+") as f:
+            adding = f'{username},{authorname},{filename},0,0\n{description}\n{post_}'
+            f.write(adding)
+        with open(f'db/datauser/{username}', 'a') as f:
+            adding = f'{postid}\n'
+        
+
         return "posting"
     elif username:
         return render_template("post.html", loggedin=loggedin, username=username)
