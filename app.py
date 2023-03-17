@@ -13,7 +13,7 @@ from werkzeug.utils import secure_filename
 alphanumeric = string.ascii_letters + string.digits
 
 app = Flask(__name__)
-UPLOAD_FOLDER = '/db_images'
+UPLOAD_FOLDER = 'db_images'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -295,7 +295,7 @@ def post():
                 filename = ''
         else:
             filename = ''
-        
+
         return "posting"
     return render_template("post.html", loggedin=loggedin, username=username)
 

@@ -34,7 +34,7 @@
           </li>
           {% if loggedin %}
           <li class="nav-item">
-            <a class="nav-link btn btn-outline-primary text-white p-2 m-2 rounded-2 text-end" href="#">Add a Post</a>
+            <a class="nav-link btn btn-outline-primary text-white p-2 m-2 rounded-2 text-end" href="/post">Add a Post</a>
           </li>
           {% endif %}
           <li class="nav-item">
@@ -73,7 +73,7 @@
         Have a title that makes sense and captures the attention of people
       </div>
       <div class="form-floating mb-1">
-        <input type="text" class="form-control" id="description" name="description" placeholder="Title of Post" />
+        <input type="text" class="form-control" id="description" name="description" placeholder="Title of Post" maxlength="150"/>
         <label for="floatingInput">Short Description</label>
       </div>
       <div class="form-text mb-3">
@@ -84,11 +84,17 @@
         <label for="floatingInput">Your Post</label>
       </div>
       <div class="form-text mb-3">
-        Your Post may include <a class="link-danger" href="https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax">Markdown</a>
+        Your post may include <a class="link-danger" target="_blank" href="https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax">Markdown</a>
       </div>
-      <div class="input-group mb-3">
-        <input type="file" class="form-control" id="inputGroupFile02">
-        <label class="input-group-text" for="inputGroupFile02">Upload</label>
+      <div class="input-group mb-1">
+        <input type="file" name="file" class="form-control" id="fileupload">
+      </div>
+      <div class="form-text mb-3">
+        A landscape image for the post
+      </div>
+      <div class="form-floating mb-4">
+        <input type="text" class="form-control" id="authorname" name="authorname" placeholder="Name of Author" maxlength="30"/>
+        <label for="authorname">Name of Author</label>
       </div>
       <button type="submit" class="btn btn-success">Post Now</button>
     </form>
