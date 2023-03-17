@@ -51,6 +51,7 @@ def home():
 
 
 @app.route("/login", methods=["POST", "GET"])
+@app.route("/login/", methods=["POST", "GET"])
 def login():
     # checks whether user is logged in arld
     loggedin, username = checklogin()
@@ -95,6 +96,7 @@ def login():
 
 # register new account
 @app.route("/register", methods=["POST", "GET"])
+@app.route("/register/", methods=["POST", "GET"])
 def register():
     # checks whether user is logged in arld
     loggedin, selfusername = checklogin()
@@ -188,6 +190,7 @@ def register():
 
 # verify email
 @app.route("/verify")
+@app.route("/verify/")
 def verify():
     loggedin, username = checklogin()
     if request.args.get("token"):
@@ -244,6 +247,7 @@ def logout():
 
 # user page
 @app.route("/users/<username>")
+@app.route("/users/<username>/")
 def userpage(username):
     loggedin, selfusername = checklogin()
     data = []
@@ -255,9 +259,18 @@ def userpage(username):
             return render_template("user.html", loggedin=loggedin, data=d, username=selfusername)
     return render_template("error.html", text=f'User {username} does not exist.')
 
+# create a post page
+@app.route("/post", methods=["POST", "GET"])
+@app.route("/post/", methods=["POST", "GET"])
+def post():
+    loggedin, username = checklogin()
+    if request.method == "POST":
+        return "ok"
+    return render_template("post.html", loggedin=loggedin, username=username)
 
 # error handling
 @app.route("/error")
+@app.route("/error/")
 def error():
     loggedin, username = checklogin()
     if request.args.get("error"):
