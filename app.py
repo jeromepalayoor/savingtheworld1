@@ -232,6 +232,7 @@ def verify():
     return render_template("verify.html", loggedin=loggedin, username=username)
 
 
+# displays current users, fullname, verified status
 @app.route("/users")
 @app.route("/users/")
 def user():
@@ -243,6 +244,7 @@ def user():
     return render_template("users.html", length=len(data), users=data, loggedin=loggedin, username=username)
 
 
+# logout page for user
 @app.route("/logout")
 def logout():
     if request.cookies.get("user"):
@@ -252,7 +254,7 @@ def logout():
     return render_template("logout.html")
 
 
-# user page
+# user page which show
 @app.route("/users/<username>")
 @app.route("/users/<username>/")
 def userpage(username):
@@ -265,6 +267,7 @@ def userpage(username):
         if d[0] == username:
             return render_template("user.html", loggedin=loggedin, data=d, username=selfusername)
     return render_template("error.html", text=f'User {username} does not exist.')
+
 
 # create a post page
 @app.route("/post", methods=["POST", "GET"])
@@ -285,6 +288,7 @@ def post():
         return "posting"
     return render_template("post.html", loggedin=loggedin, username=username)
 
+
 # error handling
 @app.route("/error")
 @app.route("/error/")
@@ -302,6 +306,8 @@ def page_not_found(e):
     return make_response(
         redirect("/error?error=Page does not exist")
     ), 404
+
+
 
 
 if __name__ == "__main__":
