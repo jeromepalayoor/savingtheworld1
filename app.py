@@ -265,7 +265,7 @@ def userpage(username):
 def post():
     loggedin, username = checklogin()
     if request.method == "POST":
-        return "ok"
+        return "posting"
     return render_template("post.html", loggedin=loggedin, username=username)
 
 # error handling
