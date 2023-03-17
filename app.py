@@ -270,7 +270,7 @@ def error():
 @app.errorhandler(404)
 def page_not_found(e):
     return make_response(
-        redirect("/error?error=Verification link is either invalid or has expired")
+        redirect("/error?error=Page does not exist")
     ), 404
 
 
