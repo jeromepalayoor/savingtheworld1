@@ -15,6 +15,25 @@
       height: 90px;
       display: block;
     }
+
+    body::after {
+      content: "";
+      height: 90px;
+      display: block;
+    }
+
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    body::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    body {
+      -ms-overflow-style: none;
+      /* IE and Edge */
+      scrollbar-width: none;
+      /* Firefox */
+    }
   </style>
 </head>
 
@@ -34,7 +53,8 @@
           </li>
           {% if loggedin %}
           <li class="nav-item">
-            <a class="nav-link btn btn-outline-primary text-white p-2 m-2 rounded-2 text-end" href="/post">Add a Post</a>
+            <a class="nav-link btn btn-outline-primary text-white p-2 m-2 rounded-2 text-end" href="/post">Add a
+              Post</a>
           </li>
           {% endif %}
           <li class="nav-item">
@@ -66,25 +86,28 @@
     <form action="/post" method="post" enctype="multipart/form-data">
       <h3>Create a New Post</h3>
       <div class="form-floating mb-1">
-        <input type="text" class="form-control" id="title" name="title" placeholder="Title of Post" />
+        <input type="text" class="form-control" id="title" name="title" placeholder="Title of Post"  maxlength="50"/>
         <label for="floatingInput">Title of Post</label>
       </div>
       <div class="form-text mb-3">
         Have a title that makes sense and captures the attention of people
       </div>
       <div class="form-floating mb-1">
-        <input type="text" class="form-control" id="description" name="description" placeholder="Title of Post" maxlength="150"/>
+        <input type="text" class="form-control" id="description" name="description" placeholder="Title of Post"
+          maxlength="150" />
         <label for="floatingInput">Short Description</label>
       </div>
       <div class="form-text mb-3">
         A short summary of your post
       </div>
       <div class="form-floating mb-1">
-        <textarea class="form-control" id="title" name="title" placeholder="Title of Post" style="height: 200px; min-height: 150px;"></textarea>
+        <textarea class="form-control" id="title" name="post" placeholder="Title of Post"
+          style="height: 200px; min-height: 150px;"></textarea>
         <label for="floatingInput">Your Post</label>
       </div>
       <div class="form-text mb-3">
-        Your post may include <a class="link-danger" target="_blank" href="https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax">Markdown</a>
+        Your post may include <a class="link-danger" target="_blank"
+          href="https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax">Markdown</a>
       </div>
       <div class="input-group mb-1">
         <input type="file" name="file" class="form-control" id="fileupload">
@@ -93,7 +116,8 @@
         A landscape image for the post
       </div>
       <div class="form-floating mb-4">
-        <input type="text" class="form-control" id="authorname" name="authorname" placeholder="Name of Author" maxlength="30"/>
+        <input type="text" class="form-control" id="authorname" name="authorname" placeholder="Name of Author"
+          maxlength="25" />
         <label for="authorname">Name of Author</label>
       </div>
       <button type="submit" class="btn btn-success">Post Now</button>

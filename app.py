@@ -9,6 +9,7 @@ import re
 import string
 import markdown
 from werkzeug.utils import secure_filename
+from markupsafe import escape
 
 alphanumeric = string.ascii_letters + string.digits
 
@@ -116,32 +117,20 @@ def register():
     if request.method == "POST":
         username = request.form["username"].strip().replace("\n", "")
         if not username.isalnum():
-            return make_response(
-                redirect("/error?error=Username contains invalid characters")
-            )
+            return make_response(redirect("/error?error=Username contains invalid characters"))
         if len(username) < 4:
-            return make_response(
-                redirect("/error?error=Username is too short")
-            )
+            return make_response(redirect("/error?error=Username is too short"))
         if len(username) > 20:
-            return make_response(
-                redirect("/error?error=Username is too long")
-            )
+            return make_response(redirect("/error?error=Username is too long"))
         email = request.form["email"].strip().replace(
             "\n", "").replace(",", "")
         password = request.form["password"].strip().replace("\n", "")
         if not password.isalnum():
-            return make_response(
-                redirect("/error?error=Password contains invalid characters")
-            )
+            return make_response(redirect("/error?error=Password contains invalid characters"))
         if len(password) < 12:
-            return make_response(
-                redirect("/error?error=Password is too short")
-            )
+            return make_response(redirect("/error?error=Password is too short"))
         if len(password) > 20:
-            return make_response(
-                redirect("/error?error=Password is too long")
-            )
+            return make_response(redirect("/error?error=Password is too long"))
         class_ = request.form["class"].strip().replace(
             "\n", "").replace(",", "")
         if not (class_ == "24/11" or class_ == "24/12" or class_ == "24/13" or class_ == "24/14" or class_ == "Teacher"):
@@ -157,37 +146,18 @@ def register():
                 data.append(i.split(","))
         for d in data:
             if username == d[0]:
-                return make_response(
-                    redirect("/error?error=Username is in use already")
-                )
+                return make_response(redirect("/error?error=Username is in use already"))
             if email == d[3]:
                 return make_response(redirect("/error?error=Email is in use already"))
         with open("db/users", "a") as f:
-            adding = (
-                username
-                + ","
-                + str(sha256(str(password + salt).encode("utf-8")).hexdigest())
-                + ","
-                + fullname
-                + ","
-                + email
-                + ","
-                + class_
-                + ","
-                + "False"
-                + "\n"
-            )
+            adding = (username + "," + str(sha256(str(password + salt).encode("utf-8")).hexdigest()
+                                           ) + "," + fullname + "," + email + "," + class_ + "," + "False" + "\n")
             f.write(adding)
         token = str(uuid.uuid4()) + str(uuid.uuid4()) + str(uuid.uuid4())
         with open("db/verification", "a") as f:
             f.write(username + "," + token + "\n")
-        send_email(
-            "Blog account activated",
-            f"Please verify your email before using your account {request.url_root}verify?token={token}",
-            myemail,
-            [email],
-            mypassword,
-        )
+        send_email("Blog account activated",
+                   f"Please verify your email before using your account {request.url_root}verify?token={token}", myemail, [email], mypassword)
         cookie = str(uuid.uuid4())
         with open("db/sessions", "a") as f:
             f.write(username + "," + cookie + "\n")
@@ -228,10 +198,7 @@ def verify():
                         if d[1] != token:
                             f.write(f"{d[0]},{d[1]}\n")
                 return render_template("verified.html", loggedin=loggedin, username=username)
-        return make_response(
-            redirect(
-                "/error?error=Verification link is either invalid or has expired")
-        )
+        return make_response(redirect("/error?error=Verification link is either invalid or has expired"))
     return render_template("verify.html", loggedin=loggedin, username=username)
 
 
@@ -277,7 +244,8 @@ def userpage(username):
 @app.route("/post/", methods=["POST", "GET"])
 def post():
     loggedin, username = checklogin()
-    if request.method == "POST":
+    if request.method == "POST" and username:
+        filename = ''
         if 'file' in request.files:
             file = request.files['file']
             if file.filename != '':
@@ -287,17 +255,34 @@ def post():
                     file.save(os.path.join(
                         app.config['UPLOAD_FOLDER'], filename))
                 else:
-                    return make_response(
-                        redirect(
-                            "/error?error=File type is invalid, accepts only .png, .jpg and .jpeg")
-                    )
-            else:
-                filename = ''
-        else:
-            filename = ''
-
+                    return make_response(redirect("/error?error=File type is invalid, accepts only .png, .jpg and .jpeg"))
+        title = request.form["title"].strip().replace("\n", "")
+        if not all(x.isalnum() or x.isspace() for x in title):
+            return make_response(redirect("/error?error=Title contains invalid characters"))
+        if len(title) < 5:
+            return make_response(redirect("/error?error=Title is too short"))
+        if len(title) > 50:
+            return make_response(redirect("/error?error=Title is too long"))
+        description = request.form["description"].strip().replace("\n", "")
+        if not all(x.isalnum() or x.isspace() for x in description):
+            return make_response(redirect("/error?error=Description contains invalid characters"))
+        if len(description) < 20:
+            return make_response(redirect("/error?error=Description is too short"))
+        if len(description) > 150:
+            return make_response(redirect("/error?error=Description is too long"))
+        post_ = escape(request.form["post"].strip())
+        authorname = request.form["authorname"].strip().replace("\n", "")
+        if not all(x.isalnum() or x.isspace() for x in authorname):
+            return make_response(redirect("/error?error=Title contains invalid characters"))
+        if len(authorname) < 5:
+            return make_response(redirect("/error?error=Author's name is too short"))
+        if len(authorname) > 25:
+            return make_response(redirect("/error?error=Author's name is too long"))
         return "posting"
-    return render_template("post.html", loggedin=loggedin, username=username)
+    elif username:
+        return render_template("post.html", loggedin=loggedin, username=username)
+    else:
+        return make_response(redirect("/login"))
 
 
 # error handling
