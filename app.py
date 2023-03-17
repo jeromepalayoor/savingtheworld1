@@ -7,12 +7,19 @@ import smtplib
 from email.mime.text import MIMEText
 import re
 import string
-import random
+import markdown
+from werkzeug.utils import secure_filename
 
 alphanumeric = string.ascii_letters + string.digits
 
 app = Flask(__name__)
+UPLOAD_FOLDER = '/db_images'
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # send emails to verify account
 def send_email(subject, body, sender, recipients, password):
@@ -265,6 +272,16 @@ def userpage(username):
 def post():
     loggedin, username = checklogin()
     if request.method == "POST":
+        if 'file' in request.files:
+            file = request.files['file']
+            if file.filename != '':
+                if file and allowed_file(file.filename):
+                    filename = secure_filename(file.filename)
+                    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            else:
+                filename = ''
+        else:
+            filename = ''
         return "posting"
     return render_template("post.html", loggedin=loggedin, username=username)
 
