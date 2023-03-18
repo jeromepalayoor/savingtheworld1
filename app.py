@@ -153,7 +153,7 @@ def register():
             adding = (username + "," + str(sha256(str(password + salt).encode("utf-8")).hexdigest()
                                            ) + "," + fullname + "," + email + "," + class_ + "," + "False" + "\n")
             f.write(adding)
-        with open(f'db/datauser/{username}', 'w+') as f:
+        with open(f'db/datauser/{username}', 'w') as f:
             f.write("")
         token = str(uuid.uuid4()) + str(uuid.uuid4()) + str(uuid.uuid4())
         with open("db/verification", "a") as f:
@@ -263,16 +263,6 @@ def post():
                 return make_response(redirect("/error?error=You are not a verified user. Verify your email first before posting any kind of content."))
     if request.method == "POST" and username:
         filename = 'noimage'
-        if 'file' in request.files:
-            file = request.files['file']
-            if file.filename != '':
-                if file and allowed_file(file.filename):
-                    filename = str(uuid.uuid4()) + '_' + \
-                        secure_filename(file.filename).replace(",", "")
-                    file.save(os.path.join(
-                        app.config['UPLOAD_FOLDER'], filename))
-                else:
-                    return make_response(redirect("/error?error=File type is invalid, accepts only .png, .jpg and .jpeg"))
         title = request.form["title"].strip().replace("\n", "")
         if not all(x.isalnum() or x.isspace() for x in title):
             return make_response(redirect("/error?error=Title contains invalid characters"))
@@ -294,14 +284,22 @@ def post():
         if len(authorname) > 25:
             return make_response(redirect("/error?error=Author's name is too long"))
         postid = str(uuid.uuid4())
+        if 'file' in request.files:
+            file = request.files['file']
+            if file.filename != '':
+                if file and allowed_file(file.filename):
+                    filename = str(uuid.uuid4()) + '_' + \
+                        secure_filename(file.filename).replace(",", "")
+                    file.save(os.path.join(
+                        app.config['UPLOAD_FOLDER'], filename))
+                else:
+                    return make_response(redirect("/error?error=File type is invalid, accepts only .png, .jpg and .jpeg"))
         with open(f'db/datapost/{postid}', "w+") as f:
             adding = f'{username},{title},{authorname},{filename},0,0\n{description}\n{post_}'
             f.write(adding)
         with open(f'db/datauser/{username}', 'a') as f:
             adding = f'{postid}\n'
-        
-
-        return "posting"
+        return make_response(redirect(f"/users/{username}"))
     elif username:
         return render_template("post.html", loggedin=loggedin, username=username)
     else:
