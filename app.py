@@ -244,7 +244,7 @@ def userpage(username):
                     with open(f"db/datapost/{postid}") as k:
                         k = k.read().splitlines()
                         a = k[0].split(",")
-                        postdata.append([a[1],a[2],a[4],a[5],k[1]])
+                        postdata.append([a[1],a[2],a[4],a[5],k[1],postid])
             return render_template("user.html", loggedin=loggedin, data=d, username=selfusername, postdata=postdata)
     return render_template("error.html", text=f'User {username} does not exist.')
 
