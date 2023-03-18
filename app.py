@@ -258,6 +258,34 @@ def viewpost(username, postid):
     with open("db/users", "r") as f:
         for i in f.read().strip().splitlines():
             data.append(i.split(","))
+    for d in data:
+        if d[0] == username:
+            postdata = []
+            with open(f"db/datauser/{username}", 'r') as f:
+                lines = f.read().splitlines()
+                for lpostid in lines:
+                    if lpostid == postid:
+                        posteddata = []
+                        with open(f"db/datapost/{postid}", "r") as k:
+                            for i in k.read().strip().splitlines():
+                                posteddata.append(i)
+                        ddd = posteddata[0].split(",")
+                        ddd[4] = str(int(ddd[4])+1)
+                        with open(f"db/datapost/{postid}", "w") as k:
+                            for user in posteddata:
+                                adding = ""
+                                adding += ','.join(ddd)
+                                adding += "\n"
+                                for m in posteddata[1:]:
+                                    adding += m
+                                    adding += "\n"
+                                k.write(adding)
+                        a = ddd
+                        if a[3] == "noimage":
+                            a[3] = None
+                        postdata.append([a[1],a[2],a[3],a[4],a[5],posteddata[1],postid,"\n".join(posteddata[2:])])
+                        return render_template("user.html", loggedin=loggedin, data=d, username=selfusername, postdata=postdata)
+    return render_template("error.html", text=f'User {username} does not exist.')
 
 # create a post page
 @app.route("/post", methods=["POST", "GET"])
@@ -288,6 +316,8 @@ def post():
         if len(description) > 150:
             return make_response(redirect("/error?error=Description is too long"))
         post_ = escape(request.form["post"].strip())
+        if len(post_) < 50:
+            return make_response(redirect("/error?error=Post is too short"))
         authorname = request.form["authorname"].strip().replace("\n", "")
         if not all(x.isalnum() or x.isspace() or x == "-" for x in authorname):
             return make_response(redirect("/error?error=Title contains invalid characters"))
