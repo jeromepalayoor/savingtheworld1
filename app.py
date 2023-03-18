@@ -116,7 +116,7 @@ def register():
     # registers new user and sends confirmation email after validating their data
     if request.method == "POST":
         username = request.form["username"].strip().replace("\n", "")
-        if not username.isalnum():
+        if not username.lower().isalnum():
             return make_response(redirect("/error?error=Username contains invalid characters"))
         if len(username) < 4:
             return make_response(redirect("/error?error=Username is too short"))
@@ -125,7 +125,7 @@ def register():
         email = request.form["email"].strip().replace(
             "\n", "").replace(",", "")
         password = request.form["password"].strip().replace("\n", "")
-        if not password.isalnum():
+        if not password.lower().isalnum():
             return make_response(redirect("/error?error=Password contains invalid characters"))
         if len(password) < 12:
             return make_response(redirect("/error?error=Password is too short"))
@@ -290,7 +290,8 @@ def viewpost(username, postid):
                     for lpostid in lines:
                         if lpostid == postid:
                             with open(f"db/datapost/{postid}", "r") as k:
-                                posteddata = k.read().splitlines()
+                                c = k.readlines()
+                            posteddata = [x.replace("\n","") for x in c]
                             ddd = posteddata[0].split(",")
                             ddd[4] = str(int(ddd[4])+1)
                             with open(f"db/datapost/{postid}", "w") as k:
@@ -304,8 +305,7 @@ def viewpost(username, postid):
                             a = ddd
                             if a[3] == "noimage":
                                 a[3] = None
-                            print(a)
-                            postdata.append([a[1],a[2],a[3],a[4],a[5],postid,"\n".join(posteddata[2:])])
+                            postdata.append([a[1],a[2],a[3],a[4],a[5],postid,str(markdown.markdown("".join(c[2:])))])
                             return render_template("viewpost.html", loggedin=loggedin, data=d, username=selfusername, postdata=postdata[0])
                     return render_template("error.html", text=f'Post does not exist.')
     return render_template("error.html", text=f'User {username} does not exist.')
@@ -327,7 +327,7 @@ def post():
     if request.method == "POST" and username:
         filename = 'noimage'
         title = request.form["title"].strip().replace("\n", "")
-        if not all(x.isalnum() or x.isspace() for x in title):
+        if not all(x.isalnum() or x.isspace() for x in title.lower()):
             return make_response(redirect("/error?error=Title contains invalid characters"))
         if len(title) < 5:
             return make_response(redirect("/error?error=Title is too short"))
@@ -342,7 +342,7 @@ def post():
         if len(post_) < 50:
             return make_response(redirect("/error?error=Post is too short"))
         authorname = request.form["authorname"].strip().replace("\n", "")
-        if not all(x.isalnum() or x.isspace() or x == "-" for x in authorname):
+        if not all(x.isalnum() or x.isspace() or x == "-" for x in authorname.lower()):
             return make_response(redirect("/error?error=Title contains invalid characters"))
         if len(authorname) < 5:
             return make_response(redirect("/error?error=Author's name is too short"))

@@ -89,11 +89,11 @@
     <div class="container-md container-fluid">
         {% if postdata[2] %}
         <div class="border-2 border-dark border-dark rounded-5"><img src="{{ url_for('static', filename=postdata[2]) }}"
-                class="w-100 rounded-5"></div>
+                class="w-100 rounded-5 mb-3"></div>
         {% endif %}
-        <h1 class="text-dark">{{ postdata[0] }}</h1>
+        <h1 class="text-dark border-danger-subtle border-2">{{ postdata[0] }}</h1>
         <h6 class="text-danger ms-3 text-opacity-50 mb-4">By: {{ postdata[1] }}</h6>
-        <p class="text-dark-emphasis mx-4 lh-lg" style="letter-spacing: 0.5px;text-justify: newspaper;">{{ postdata[6]
+        <p class="text-dark-emphasis mx-4 lh-lg" style="letter-spacing: 0.5px;text-justify: newspaper;">{{ postdata[6]|safe
             }}</p>
         <p class="mt-4">{{postdata[3]}}
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="me-2">
