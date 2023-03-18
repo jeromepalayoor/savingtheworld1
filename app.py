@@ -343,7 +343,7 @@ def post():
             return make_response(redirect("/error?error=Post is too short"))
         authorname = request.form["authorname"].strip().replace("\n", "")
         if not all(x.isalnum() or x.isspace() or x == "-" for x in authorname.lower()):
-            return make_response(redirect("/error?error=Title contains invalid characters"))
+            return make_response(redirect("/error?error=Author's contains invalid characters"))
         if len(authorname) < 5:
             return make_response(redirect("/error?error=Author's name is too short"))
         if len(authorname) > 25:
