@@ -250,14 +250,38 @@ def userpage(username):
 
 
 # view a post
-@app.route("/users/<username>/<postid>")
-@app.route("/users/<username>/<postid>/")
+@app.route("/users/<username>/<postid>", methods=["POST", "GET"])
+@app.route("/users/<username>/<postid>/", methods=["POST", "GET"])
 def viewpost(username, postid):
     loggedin, selfusername = checklogin()
     data = []
     with open("db/users", "r") as f:
         for i in f.read().strip().splitlines():
             data.append(i.split(","))
+    if request.method == "POST" and selfusername:
+        for d in data:
+            if d[0] == selfusername:
+                if d[5] == "False":
+                    return make_response(redirect("/error?error=You are not a verified user. Verify your email first before liking any post."))
+        try:
+            posteddata = []
+            with open(f"db/datapost/{postid}", "r") as k:
+                for i in k.read().strip().splitlines():
+                    posteddata.append(i)
+            ddd = posteddata[0].split(",")
+            ddd[5] = str(int(ddd[4])+1)
+            with open(f"db/datapost/{postid}", "w") as k:
+                for user in posteddata:
+                    adding = ""
+                    adding += ','.join(ddd)
+                    adding += "\n"
+                    for m in posteddata[1:]:
+                        adding += m
+                        adding += "\n"
+                    k.write(adding)
+            return make_response(redirect(f"/users/{username}/{postid}"))
+        except:
+            return render_template("error.html", text=f'An error occured')
     for d in data:
         if d[0] == username:
             postdata = []
@@ -285,6 +309,7 @@ def viewpost(username, postid):
                             a[3] = None
                         postdata.append([a[1],a[2],a[3],a[4],a[5],posteddata[1],postid,"\n".join(posteddata[2:])])
                         return render_template("user.html", loggedin=loggedin, data=d, username=selfusername, postdata=postdata)
+                return render_template("error.html", text=f'Post does not exist.')
     return render_template("error.html", text=f'User {username} does not exist.')
 
 # create a post page
