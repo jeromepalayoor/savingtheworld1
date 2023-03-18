@@ -240,13 +240,11 @@ def userpage(username):
             postdata = []
             with open(f"db/datauser/{username}", 'r') as f:
                 lines = f.read().splitlines()
-                print(lines)
                 for postid in lines:
                     with open(f"db/datapost/{postid}") as k:
                         k = k.read().splitlines()
                         a = k[0].split(",")
                         postdata.append([a[1],a[2],a[4],a[5],k[1]])
-            print(postdata)
             return render_template("user.html", loggedin=loggedin, data=d, username=selfusername, postdata=postdata)
     return render_template("error.html", text=f'User {username} does not exist.')
 
