@@ -281,8 +281,6 @@ def post():
         if len(title) > 50:
             return make_response(redirect("/error?error=Title is too long"))
         description = request.form["description"].strip().replace("\n", "")
-        if not all(x.isalnum() or x.isspace() for x in description):
-            return make_response(redirect("/error?error=Description contains invalid characters"))
         if len(description) < 20:
             return make_response(redirect("/error?error=Description is too short"))
         if len(description) > 150:
