@@ -261,6 +261,7 @@ def post():
         if d[0] == username:
             if d[5] == "False":
                 return make_response(redirect("/error?error=You are not a verified user. Verify your email first before posting any kind of content."))
+    #adds a new post
     if request.method == "POST" and username:
         filename = 'noimage'
         title = request.form["title"].strip().replace("\n", "")
