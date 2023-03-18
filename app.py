@@ -299,6 +299,7 @@ def post():
             f.write(adding)
         with open(f'db/datauser/{username}', 'a') as f:
             adding = f'{postid}\n'
+            f.write(adding)
         return make_response(redirect(f"/users/{username}"))
     elif username:
         return render_template("post.html", loggedin=loggedin, username=username)
