@@ -14,7 +14,7 @@ from markupsafe import escape
 alphanumeric = string.ascii_letters + string.digits
 
 app = Flask(__name__)
-UPLOAD_FOLDER = 'db_images'
+UPLOAD_FOLDER = 'static'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -271,32 +271,29 @@ def viewpost(username, postid):
             ddd = posteddata[0].split(",")
             ddd[5] = str(int(ddd[4])+1)
             with open(f"db/datapost/{postid}", "w") as k:
-                for user in posteddata:
-                    adding = ""
-                    adding += ','.join(ddd)
+                adding = ""
+                adding += ','.join(ddd)
+                adding += "\n"
+                for m in posteddata[1:]:
+                    adding += m
                     adding += "\n"
-                    for m in posteddata[1:]:
-                        adding += m
-                        adding += "\n"
-                    k.write(adding)
+                k.write(adding)
             return make_response(redirect(f"/users/{username}/{postid}"))
         except:
             return render_template("error.html", text=f'An error occured')
-    for d in data:
-        if d[0] == username:
-            postdata = []
-            with open(f"db/datauser/{username}", 'r') as f:
-                lines = f.read().splitlines()
-                for lpostid in lines:
-                    if lpostid == postid:
-                        posteddata = []
-                        with open(f"db/datapost/{postid}", "r") as k:
-                            for i in k.read().strip().splitlines():
-                                posteddata.append(i)
-                        ddd = posteddata[0].split(",")
-                        ddd[4] = str(int(ddd[4])+1)
-                        with open(f"db/datapost/{postid}", "w") as k:
-                            for user in posteddata:
+    else:
+        for d in data:
+            if d[0] == username:
+                postdata = []
+                with open(f"db/datauser/{username}", 'r') as f:
+                    lines = f.read().splitlines()
+                    for lpostid in lines:
+                        if lpostid == postid:
+                            with open(f"db/datapost/{postid}", "r") as k:
+                                posteddata = k.read().splitlines()
+                            ddd = posteddata[0].split(",")
+                            ddd[4] = str(int(ddd[4])+1)
+                            with open(f"db/datapost/{postid}", "w") as k:
                                 adding = ""
                                 adding += ','.join(ddd)
                                 adding += "\n"
@@ -304,12 +301,13 @@ def viewpost(username, postid):
                                     adding += m
                                     adding += "\n"
                                 k.write(adding)
-                        a = ddd
-                        if a[3] == "noimage":
-                            a[3] = None
-                        postdata.append([a[1],a[2],a[3],a[4],a[5],postid,"\n".join(posteddata[2:])])
-                        return render_template("user.html", loggedin=loggedin, data=d, username=selfusername, postdata=postdata[0])
-                return render_template("error.html", text=f'Post does not exist.')
+                            a = ddd
+                            if a[3] == "noimage":
+                                a[3] = None
+                            print(a)
+                            postdata.append([a[1],a[2],a[3],a[4],a[5],postid,"\n".join(posteddata[2:])])
+                            return render_template("viewpost.html", loggedin=loggedin, data=d, username=selfusername, postdata=postdata[0])
+                    return render_template("error.html", text=f'Post does not exist.')
     return render_template("error.html", text=f'User {username} does not exist.')
 
 # create a post page
@@ -386,11 +384,11 @@ def error():
 
 
 # 404 page not found error handling
-@app.errorhandler(404)
-def page_not_found(e):
-    return make_response(
-        redirect("/error?error=Page does not exist")
-    ), 404
+#@app.errorhandler(404)
+#def page_not_found(e):
+#    return make_response(
+#        redirect("/error?error=Page does not exist")
+#    ), 404
 
 
 if __name__ == "__main__":
