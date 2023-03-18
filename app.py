@@ -239,7 +239,8 @@ def userpage(username):
         if d[0] == username:
             postdata = []
             with open(f"db/datauser/{username}", 'r') as f:
-                for postid in f:
+                lines = f.read().splitlines()
+                for postid in line:
                     with open(f"db/datapost/{postid}") as k:
                         k = k.read().splitlines()
                         a = k[0].split(",")
