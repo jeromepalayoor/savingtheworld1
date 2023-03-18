@@ -240,14 +240,26 @@ def userpage(username):
             postdata = []
             with open(f"db/datauser/{username}", 'r') as f:
                 lines = f.read().splitlines()
+                print(lines)
                 for postid in lines:
                     with open(f"db/datapost/{postid}") as k:
                         k = k.read().splitlines()
                         a = k[0].split(",")
                         postdata.append([a[1],a[2],a[4],a[5],k[1]])
+            print(postdata)
             return render_template("user.html", loggedin=loggedin, data=d, username=selfusername, postdata=postdata)
     return render_template("error.html", text=f'User {username} does not exist.')
 
+
+# view a post
+@app.route("/users/<username>/<postid>")
+@app.route("/users/<username>/<postid>/")
+def viewpost(username, postid):
+    loggedin, selfusername = checklogin()
+    data = []
+    with open("db/users", "r") as f:
+        for i in f.read().strip().splitlines():
+            data.append(i.split(","))
 
 # create a post page
 @app.route("/post", methods=["POST", "GET"])
