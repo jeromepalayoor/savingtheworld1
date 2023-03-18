@@ -241,9 +241,10 @@ def userpage(username):
             with open(f"db/datauser/{username}", 'r') as f:
                 for postid in f:
                     with open(f"db/datapost/{postid}") as k:
-                        
-            for post
-            return render_template("user.html", loggedin=loggedin, data=d, username=selfusername)
+                        k = k.read().splitlines()
+                        a = k[0].split(",")
+                        postdata.append([a[1],a[2],a[4],a[5],k[1]])
+            return render_template("user.html", loggedin=loggedin, data=d, username=selfusername, postdata=postdata)
     return render_template("error.html", text=f'User {username} does not exist.')
 
 
@@ -296,7 +297,7 @@ def post():
             return make_response(redirect("/error?error=Author's name is too long"))
         postid = str(uuid.uuid4())
         with open(f'db/datapost/{postid}', "w+") as f:
-            adding = f'{username},{authorname},{filename},0,0\n{description}\n{post_}'
+            adding = f'{username},{title},{authorname},{filename},0,0\n{description}\n{post_}'
             f.write(adding)
         with open(f'db/datauser/{username}', 'a') as f:
             adding = f'{postid}\n'
