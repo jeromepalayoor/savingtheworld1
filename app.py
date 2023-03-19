@@ -10,6 +10,7 @@ import string
 import markdown
 from werkzeug.utils import secure_filename
 from markupsafe import escape
+from random import shuffle
 
 alphanumeric = string.ascii_letters + string.digits
 
@@ -55,8 +56,17 @@ def checklogin():
 # home page, to update
 @app.route("/")
 def home():
-    loggedin, username = checklogin()
-    return render_template("index.html", loggedin=loggedin, username=username)
+    loggedin, selfusername = checklogin()
+    postdata = []
+    with open("db/datapost/ids") as f:
+        ids = f.read().splitlines()
+        for postid in ids:
+            with open(f"db/datapost/{postid}") as k:
+                k = k.read().splitlines()
+                a = k[0].split(",")
+                postdata.append([a[0],a[1],a[2],a[4],a[5],k[1],postid])
+    shuffle(postdata)
+    return render_template("index.html", loggedin=loggedin, username=selfusername, postdata=postdata)
 
 # login handler
 
