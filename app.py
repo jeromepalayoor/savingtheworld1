@@ -58,7 +58,7 @@ def checklogin():
 def home():
     loggedin, selfusername = checklogin()
     postdata = []
-    with open("db/datapost/ids") as f:
+    with open("db/datapost/ids", "r") as f:
         ids = f.read().splitlines()
         for postid in ids:
             with open(f"db/datapost/{postid}") as k:
@@ -375,6 +375,9 @@ def post():
             adding = f'{username},{title},{authorname},{filename},0,0\n{description}\n{post_}'
             f.write(adding)
         with open(f'db/datauser/{username}', 'a') as f:
+            adding = f'{postid}\n'
+            f.write(adding)
+        with open("db/datapost/ids", 'a') as f:
             adding = f'{postid}\n'
             f.write(adding)
         return make_response(redirect(f"/users/{username}"))
