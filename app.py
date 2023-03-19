@@ -64,7 +64,7 @@ def home():
             with open(f"db/datapost/{postid}") as k:
                 k = k.read().splitlines()
                 a = k[0].split(",")
-                postdata.append([a[0],a[1],a[2],a[4],a[5],k[1],postid])
+                postdata.append([a[0], a[1], a[2], a[4], a[5], k[1], postid])
     shuffle(postdata)
     return render_template("index.html", loggedin=loggedin, username=selfusername, postdata=postdata)
 
@@ -125,18 +125,16 @@ def register():
         return redirect("/users/" + selfusername)
     # registers new user and sends confirmation email after validating their data
     if request.method == "POST":
-        username = request.form["username"].strip().replace("\n", "")
-        if not username.lower().isalnum():
-            return make_response(redirect("/error?error=Username contains invalid characters"))
-        if len(username) < 4:
+        username = request.form["username"].strip().replace(
+            "\n", "").replace(",", "")
+        if len(username) < 3:
             return make_response(redirect("/error?error=Username is too short"))
         if len(username) > 20:
             return make_response(redirect("/error?error=Username is too long"))
         email = request.form["email"].strip().replace(
             "\n", "").replace(",", "")
-        password = request.form["password"].strip().replace("\n", "")
-        if not password.lower().isalnum():
-            return make_response(redirect("/error?error=Password contains invalid characters"))
+        password = request.form["password"].strip().replace(
+            "\n", "").replace(",", "")
         if len(password) < 12:
             return make_response(redirect("/error?error=Password is too short"))
         if len(password) > 20:
@@ -254,7 +252,7 @@ def userpage(username):
                     with open(f"db/datapost/{postid}") as k:
                         k = k.read().splitlines()
                         a = k[0].split(",")
-                        postdata.append([a[1],a[2],a[4],a[5],k[1],postid])
+                        postdata.append([a[1], a[2], a[4], a[5], k[1], postid])
             return render_template("user.html", loggedin=loggedin, data=d, username=selfusername, postdata=postdata)
     return render_template("error.html", text=f'User {username} does not exist.')
 
@@ -303,7 +301,7 @@ def viewpost(username, postid):
                         if lpostid == postid:
                             with open(f"db/datapost/{postid}", "r") as k:
                                 c = k.readlines()
-                            posteddata = [x.replace("\n","") for x in c]
+                            posteddata = [x.replace("\n", "") for x in c]
                             ddd = posteddata[0].split(",")
                             ddd[4] = str(int(ddd[4])+1)
                             with open(f"db/datapost/{postid}", "w") as k:
@@ -317,12 +315,15 @@ def viewpost(username, postid):
                             a = ddd
                             if a[3] == "noimage":
                                 a[3] = None
-                            postdata.append([a[1],a[2],a[3],a[4],a[5],postid,str(markdown.markdown("".join(c[2:])))])
+                            postdata.append([a[1], a[2], a[3], a[4], a[5], postid, str(
+                                markdown.markdown("".join(c[2:])))])
                             return render_template("viewpost.html", loggedin=loggedin, data=d, username=selfusername, postdata=postdata[0])
                     return render_template("error.html", text=f'Post does not exist.')
     return render_template("error.html", text=f'User {username} does not exist.')
 
 # create a post page
+
+
 @app.route("/post", methods=["POST", "GET"])
 @app.route("/post/", methods=["POST", "GET"])
 def post():
@@ -335,12 +336,11 @@ def post():
         if d[0] == username:
             if d[5] == "False":
                 return make_response(redirect("/error?error=You are not a verified user. Verify your email first before posting any kind of content."))
-    #adds a new post
+    # adds a new post
     if request.method == "POST" and username:
         filename = 'noimage'
-        title = request.form["title"].strip().replace("\n", "")
-        if not all(x.isalnum() or x.isspace() for x in title.lower()):
-            return make_response(redirect("/error?error=Title contains invalid characters"))
+        title = request.form["title"].strip().replace(
+            "\n", "").replace(",", "")
         if len(title) < 5:
             return make_response(redirect("/error?error=Title is too short"))
         if len(title) > 50:
@@ -353,9 +353,8 @@ def post():
         post_ = escape(request.form["post"].strip())
         if len(post_) < 50:
             return make_response(redirect("/error?error=Post is too short"))
-        authorname = request.form["authorname"].strip().replace("\n", "")
-        if not all(x.isalnum() or x.isspace() or x == "-" for x in authorname.lower()):
-            return make_response(redirect("/error?error=Author's contains invalid characters"))
+        authorname = request.form["authorname"].strip().replace(
+            "\n", "").replace(",", "")
         if len(authorname) < 5:
             return make_response(redirect("/error?error=Author's name is too short"))
         if len(authorname) > 25:
@@ -399,8 +398,8 @@ def error():
 
 
 # 404 page not found error handling
-#@app.errorhandler(404)
-#def page_not_found(e):
+# @app.errorhandler(404)
+# def page_not_found(e):
 #    return make_response(
 #        redirect("/error?error=Page does not exist")
 #    ), 404
