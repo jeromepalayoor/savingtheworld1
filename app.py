@@ -258,7 +258,9 @@ def viewpost(username, postid):
     with open("db/users", "r") as f:
         for i in f.read().strip().splitlines():
             data.append(i.split(","))
-    if request.method == "POST" and selfusername:
+    if request.method == "POST":
+        if not username:
+            return make_response(redirect("/error?error=You need to be logged in before liking any post."))
         for d in data:
             if d[0] == selfusername:
                 if d[5] == "False":
