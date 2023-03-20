@@ -399,10 +399,16 @@ def error():
 
 # 404 page not found error handling
 @app.errorhandler(404)
-def page_not_found(e):
+def page_not_found(_):
     loggedin, username = checklogin()
     return render_template("error.html", text="The page you are looking for does not exist. Make sure the link is correct.", loggedin=loggedin, username=username)
 
+# nothing to see here, if i dont have this code the thing wont run
+@app.route("/easter")
+@app.route("/easter/")
+def easteregg():
+    loggedin, username = checklogin()
+    return render_template("error.html", text="Huh??? How did you find me?", loggedin=loggedin, username=username, title="Easter Egg")
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 80))
