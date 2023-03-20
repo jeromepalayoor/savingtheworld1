@@ -317,7 +317,7 @@ def viewpost(username, postid):
                             if a[3] == "noimage":
                                 a[3] = None
                             postdata.append([kkk, a[1], a[2], a[3], a[4], postid, str(
-                                markdown.markdown("".join(c[3:])))])
+                                markdown.markdown("".join(c[3:]))),a[0]])
                             return render_template("viewpost.html", loggedin=loggedin, data=d, username=selfusername, postdata=postdata[0])
                     return render_template("error.html", text=f'Post does not exist.')
     return render_template("error.html", text=f'User {username} does not exist.')
