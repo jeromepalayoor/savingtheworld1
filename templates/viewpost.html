@@ -48,10 +48,6 @@
                     <h3 class="mb-0">Blogoont</h3>
                 </a>
                 <div>
-                    <button class="navbar-toggler" type="button"
-                        data-bs-toggle="collapse" data-bs-target="#navbarlinks">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
                     <button onclick="history.back()" class="btn btn-primary
                         ms-3">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16"
@@ -64,6 +60,11 @@
                                 .708l4 4a.5.5 0 0 0 .708-.708L2.707
                                 8.5H14.5A.5.5 0 0 0 15 8z" />
                             </svg>Go Back
+                        </button>
+                        <button class="navbar-toggler" type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#navbarlinks">
+                            <span class="navbar-toggler-icon"></span>
                         </button>
                     </div>
                     <div class="collapse navbar-collapse" id="navbarlinks">
@@ -127,7 +128,8 @@
                 <h1 class="text-dark border-danger-subtle border-2">{{
                     postdata[0] }}</h1>
                 <h6 class="text-danger ms-3 text-opacity-50 mb-4">By: {{
-                    postdata[1] }}  <a href="/users/{{postdata[7]}}" class="link-danger">({{postdata[7]}})</a></h6>
+                    postdata[1] }} <a href="/users/{{postdata[7]}}"
+                        class="link-danger">({{postdata[7]}})</a></h6>
                 <p class="text-dark-emphasis mx-4 lh-lg" style="letter-spacing:
                     0.5px;text-justify: newspaper;">{{ postdata[6]|safe
                     }}</p>
