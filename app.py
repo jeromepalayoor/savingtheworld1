@@ -304,7 +304,7 @@ def viewpost(username, postid):
                             posteddata = [x.replace("\n", "") for x in c]
                             ddd = posteddata[0].split(",")
                             kkk = posteddata[1]
-                            ddd[4] = str(int(ddd[4])+1)
+                            ddd[3] = str(int(ddd[3])+1)
                             with open(f"db/datapost/{postid}", "w") as k:
                                 adding = ""
                                 adding += ','.join(ddd)
