@@ -64,7 +64,7 @@ def home():
             with open(f"db/datapost/{postid}") as k:
                 k = k.read().splitlines()
                 a = k[0].split(",")
-                postdata.append([a[0], a[1], a[2], a[4], a[5], k[1], postid])
+                postdata.append([a[0], k[1], a[1], a[3], a[4], k[2], postid])
     shuffle(postdata)
     return render_template("index.html", loggedin=loggedin, username=selfusername, postdata=postdata)
 
@@ -252,7 +252,7 @@ def userpage(username):
                     with open(f"db/datapost/{postid}") as k:
                         k = k.read().splitlines()
                         a = k[0].split(",")
-                        postdata.append([a[1], a[2], a[4], a[5], k[1], postid])
+                        postdata.append([k[1], a[1], a[3], a[4], k[2], postid])
             return render_template("user.html", loggedin=loggedin, data=d, username=selfusername, postdata=postdata)
     return render_template("error.html", text=f'User {username} does not exist.')
 
@@ -279,7 +279,7 @@ def viewpost(username, postid):
                 for i in k.read().strip().splitlines():
                     posteddata.append(i)
             ddd = posteddata[0].split(",")
-            ddd[5] = str(int(ddd[5])+1)
+            ddd[4] = str(int(ddd[4])+1)
             with open(f"db/datapost/{postid}", "w") as k:
                 adding = ""
                 adding += ','.join(ddd)
@@ -303,6 +303,7 @@ def viewpost(username, postid):
                                 c = k.readlines()
                             posteddata = [x.replace("\n", "") for x in c]
                             ddd = posteddata[0].split(",")
+                            kkk = posteddata[1]
                             ddd[4] = str(int(ddd[4])+1)
                             with open(f"db/datapost/{postid}", "w") as k:
                                 adding = ""
@@ -315,8 +316,8 @@ def viewpost(username, postid):
                             a = ddd
                             if a[3] == "noimage":
                                 a[3] = None
-                            postdata.append([a[1], a[2], a[3], a[4], a[5], postid, str(
-                                markdown.markdown("".join(c[2:])))])
+                            postdata.append([kkk, a[1], a[2], a[3], a[4], postid, str(
+                                markdown.markdown("".join(c[3:])))])
                             return render_template("viewpost.html", loggedin=loggedin, data=d, username=selfusername, postdata=postdata[0])
                     return render_template("error.html", text=f'Post does not exist.')
     return render_template("error.html", text=f'User {username} does not exist.')
@@ -340,7 +341,7 @@ def post():
     if request.method == "POST" and username:
         filename = 'noimage'
         title = request.form["title"].strip().replace(
-            "\n", "").replace(",", "")
+            "\n", "")
         if len(title) < 5:
             return make_response(redirect("/error?error=Title is too short"))
         if len(title) > 50:
@@ -371,7 +372,7 @@ def post():
                 else:
                     return make_response(redirect("/error?error=File type is invalid, accepts only .png, .jpg and .jpeg"))
         with open(f'db/datapost/{postid}', "w+") as f:
-            adding = f'{username},{title},{authorname},{filename},0,0\n{description}\n{post_}'
+            adding = f'{username},{authorname},{filename},0,0\n{title}\n{description}\n{post_}'
             f.write(adding)
         with open(f'db/datauser/{username}', 'a') as f:
             adding = f'{postid}\n'

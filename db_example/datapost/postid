@@ -1,3 +1,4 @@
-username,title,author,imagefilename,views,likes
+username,author,imagefilename,views,likes
+title
 shortdescription
 post
