@@ -311,8 +311,8 @@ def viewpost(username, postid):
                                     adding += "\n"
                                 k.write(adding)
                             a = ddd
-                            if a[3] == "noimage":
-                                a[3] = None
+                            if a[2] == "noimage":
+                                a[2] = None
                             postdata.append([kkk, a[1], a[2], a[3], a[4], postid, str(
                                 markdown.markdown("".join(c[3:]))), a[0]])
                             return render_template("viewpost.html", loggedin=loggedin, data=d, username=selfusername, postdata=postdata[0])
