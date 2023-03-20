@@ -29,7 +29,7 @@ def allowed_file(filename):
 def send_email(subject, body, sender, recipients, password):
     msg = MIMEText(body)
     msg["Subject"] = subject
-    msg["From"] = "Savingtheworld1 Account Verification"
+    msg["From"] = "Blogoont Account Verification"
     msg["To"] = ", ".join(recipients)
     smtp_server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
     smtp_server.login(sender, password)
@@ -68,8 +68,6 @@ def home():
     return render_template("index.html", loggedin=loggedin, username=selfusername, postdata=postdata)
 
 # login handler
-
-
 @app.route("/login", methods=["POST", "GET"])
 @app.route("/login/", methods=["POST", "GET"])
 def login():
@@ -166,7 +164,7 @@ def register():
         with open("db/verification", "a") as f:
             f.write(username + "," + token + "\n")
         send_email("Blog account activated",
-                   f"Please verify your email before using your account {request.url_root}verify?token={token}", myemail, [email], mypassword)
+                   f"Please verify your email before using your Blogoont account: {request.url_root}verify?token={token}", myemail, [email], mypassword)
         cookie = str(uuid.uuid4())
         with open("db/sessions", "a") as f:
             f.write(username + "," + cookie + "\n")
