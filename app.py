@@ -24,9 +24,8 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+
 # send emails to verify account
-
-
 def send_email(subject, body, sender, recipients, password):
     msg = MIMEText(body)
     msg["Subject"] = subject
@@ -317,7 +316,7 @@ def viewpost(username, postid):
                             if a[3] == "noimage":
                                 a[3] = None
                             postdata.append([kkk, a[1], a[2], a[3], a[4], postid, str(
-                                markdown.markdown("".join(c[3:]))),a[0]])
+                                markdown.markdown("".join(c[3:]))), a[0]])
                             return render_template("viewpost.html", loggedin=loggedin, data=d, username=selfusername, postdata=postdata[0])
                     return render_template("error.html", text=f'Post does not exist.')
     return render_template("error.html", text=f'User {username} does not exist.')
@@ -399,11 +398,11 @@ def error():
 
 
 # 404 page not found error handling
-# @app.errorhandler(404)
-# def page_not_found(e):
-#    return make_response(
-#        redirect("/error?error=Page does not exist")
-#    ), 404
+@app.errorhandler(404)
+def page_not_found(e):
+    return make_response(
+        redirect("/error?error=Page does not exist")
+    ), 404
 
 
 if __name__ == "__main__":
