@@ -400,9 +400,8 @@ def error():
 # 404 page not found error handling
 @app.errorhandler(404)
 def page_not_found(e):
-    return make_response(
-        redirect("/error?error=Page does not exist")
-    ), 404
+    loggedin, username = checklogin()
+    return render_template("error.html", text="The page you are looking for does not exist. Make sure the link is correct.", loggedin=loggedin, username=username)
 
 
 if __name__ == "__main__":
