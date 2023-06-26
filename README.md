@@ -8,9 +8,8 @@ Created using [Python Flask](https://flask.palletsprojects.com/en/2.2.x/) as bac
 
 [Project Details](https://docs.google.com/document/d/1D4Daka6xcuZB8Wg_MbTXhbfrMkL9DZG11iMpqvgu2Dg/edit)
 
-Website link: [check it out here](https://wizardly-water-19056.pktriot.net/)
+Website link: [https://savetheworld1.coderhere.repl.co/](https://savetheworld1.coderhere.repl.co/)
 
-Note: Since my code has sensitive information, I did not use a remote hosting environment due to privacy concerns. Instead I am running a server from my computer and using [Packetriot](https://packetriot.com/) to use a tunnel sevice and host my local server onto the internet, hence the weird link. It may be down for a while when I am updating my code. This website may not work on school wifi.
 
 ------------
 
